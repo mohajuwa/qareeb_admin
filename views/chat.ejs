@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+            <div class="container-fluid">
+              <div class="page-title">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <h3><%=customer[0].name%> <span class="f-w-600 f-18"><%=lan.Chat%></span></h3>
+                  </div>
+                  <div class="col-sm-6">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                      <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                      <li class="breadcrumb-item active"><%=lan.Chat%></li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Container-fluid starts-->
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-3 call-chat-sidebar">
+                  <div class="card">
+                    <div class="card-body chat-body">
+                      <div class="chat-box">
+                        <div class="chat-left-aside">
+                          <!-- <div class="d-flex mb-0 border-bottom">
+                            <div class="flex-grow-1">
+                              <div class="about">
+                                <div class="name" style="padding-top: 11px; padding-bottom: 26px;"><a class="f-w-600"></a></div>
+                              </div>
+                            </div>
+                          </div> -->
+                          <% if(chat_list != ""){ %>
+                            <div class="people-list custom-scrollbar" id="people-list" style="overflow-y: auto;">
+                              <div class="list custom-scrollbar" id="chat_user_list">
+                                  <% chat_list.forEach((data, i) => { %>
+                                    <div class="d-flex align-items-center rounded-3 my-1 py-3 px-2 <%= i == 0 ? 'chat_background' : '' %>  chat_div" id="chat_user" data-id="<%=data.id%>" data-sender="<%=data.sender_id%>" data-reciver="<%=data.resiver_id%>">
+                                        <a href="../../<%=data.profile_image%>" target="_blank"><img src="../../<%=data.profile_image%>" height="45" width="45" style="border-radius: 6px;" alt="Image"></a>
+                                        <div class="p-l-10">
+                                          <h5 class="name mb-1 d-flex">
+                                            <%=data.dfirst_name%> <%=data.dlast_name%>
+                                            <% if(data.status == "1"){ %>
+                                              <span class="dot1" id="new_message" style="margin-left: 5px;"></span>
+                                            <% } else { %>
+                                              <span class="dot1 d-none" id="new_message" style="margin-left: 5px;"></span>
+                                            <% }; %>
+                                            <span class="loadingDots d-none" id="user_list_typing"><span class="dot1 m-0"></span><span class="dot2 m-0"></span><span class="dot3 m-0"></span><span class="dot4 m-0"></span></span> 
+                                          </h5>
+                                          <p class="status f-w-700 m-0"><%-data.message%> <span class="f-w-400"><%=data.date%></span></p>
+                                        </div>
+                                    </div>
+                                  <% }) %>
+                                </div>
+                              </div>
+  
+                            <% } else { %>
+  
+                                <div class="people-list custom-scrollbar d-flex align-items-center justify-content-center" id="people-list">
+                                  <div class="list custom-scrollbar" id="chat_user_list">
+                                    <div class="text-center">
+                                      <i class="fa fa-comments-o f-40"></i>
+                                    </div>
+                                    <div>
+                                      <span class="f-18 f-w-500"><%=lan.Chat%> <%=lan.Unavailable%></span>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                            <% }; %>
+                                
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+  
+  
+  
+                <% if(all_chat != "") { %>
+                <div class="col-sm-12 col-md-9 col-lg-9 col-xl-9 call-chat-body">
+                  <div class="card">
+                    <div class="card-body p-0">
+                      <div class="row chat-box">
+                        <div class="col chat-right-aside">
+                          <div class="chat">
+                            <div class="d-flex chat-header clearfix align-items-start">
+                              <div class="flex-grow-1">
+                                <div class="about m-0">
+                                  <% if ( user != "" ){ %>
+                                      <div class="name d-flex align-item-center">
+                                        <p class="f-w-600 f-16 m-0" id="chat_profile_user"><%=user[0].first_name%> <%=user[0].last_name%></p>
+                                      </div>
+                                  <% } else { %>
+                                    <div class="name"><a href="user-profile.html" id="chat_profile_user"></a></div>
+                                  <% }; %>
+                                  
+                                  <% if ( last_data != "" ){ %>
+                                  <div class="status digits" id="chat_profile_time"><%=lan.Last%> <%=lan.Message%> <%=last_data%></div>
+                                  <% } else { %>
+                                    <div class="status digits" id=""></div>
+                                  <% }; %>
+                                </div>
+                              </div>
+                            </div>
+  
+                            <div class="chat-history chat-msg-box custom-scrollbar pb-0 chat_message_position" id="scrollbottom">
+                              <ul id="chat_detail">
+                                <% all_chat.forEach((adata, i) => { %>
+                                  
+                                  <li class="text-center my-2">
+                                    <span class="f-w-500"><%=adata.date%></span>
+                                  </li>
+  
+                                  <% let chat = adata.chat %>
+                                  <% chat.forEach((cdata, i) => { %>
+  
+                                    <% if (cdata.status == 1){ %>
+                                        <li class="clearfix">
+                                          <div class="message other-message pull-right py-1 mb-1 bg-light-primary dchat" style="width: fit-content; max-width: 50%;">
+                                            <div class="message-data m-0"><span class="message-data-time"><%=cdata.date%></span></div>
+                                            <span style="color: black !important;"><%- cdata.message %></span>
+                                          </div>
+                                        </li>
+                                      <% } else { %>
+                                        <li>
+                                          <div class="message my-message py-1 mb-1 dchat" style="width: fit-content; max-width: 50%;">
+                                            <div class="message-data text-end m-0" style="color: black;"><span class="message-data-time"><%=cdata.date%></span></div>
+                                            <span style="color: black !important;"><%- cdata.message %></span>
+                                          </div>
+                                        </li>
+                                    <% }; %>
+  
+                                  <% }) %>
+                                <% }) %>
+  
+                              </ul>
+                              <div class="m-l-15 d-none" id="user_typing">
+                                <span class="loadingmessage m-0"><span class="mdot1 m-0"></span><span class="mdot2 m-0"></span><span class="mdot3 m-0"></span></span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col chat-menu">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <% }; %>
+  
+  
+  
+              </div>
+            </div>
+            <!-- Container-fluid Ends-->
+          </div>
+
+    <%- include('./partials/footer'); -%>
+    <%- include('./partials/script'); -%>
+    <script>
+        let chatDetail = document.getElementById('scrollbottom');
+        chatDetail.scrollTop = chatDetail.scrollHeight;
+    </script>
+    </body>
+</html>

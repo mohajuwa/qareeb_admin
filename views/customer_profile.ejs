@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    <!-- <link rel="stylesheet" type="text/css" href="../../css/vendors/bootstrap.css"> -->
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=lan.Customer%> <%=lan.Profile%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Customer%> <%=lan.Profile%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="email-wrap bookmark-wrap user-profile">
+              <div class="row">
+                <div class="col-xxl-3 col-xl-4 box-col-30">
+                  <div class="md-sidebar email-sidebar"><a class="btn btn-primary md-sidebar-toggle" href="javascript:void(0)"><i class="fa fa-list"></i></a>
+                    <div class="md-sidebar-aside email-left-aside">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="email-app-sidebar left-bookmark">
+                            <div class="text-center">
+                                <div class="flex-grow-1 mt-2">
+                                <span class="d-flex"><%=lan.Name%> :-&nbsp;<p><%=customer.name%></p></span>
+                                <span class="d-flex border-top mt-1 pt-1"><%=lan.Email%> :-&nbsp;<p><%=customer.email%></p></span>
+                                <span class="d-flex border-top mt-1 pt-1"><%=lan.Mobile%> <%=lan.Number%> :-&nbsp;<p><%=customer.country_code%> <%=customer.phone%></p></span>
+                                <span class="d-flex border-top mt-1 pt-1"><%=lan.Referral%> <%=lan.Code%> :-&nbsp;<p><%=customer.referral_code%></p></span>
+                                <span class="d-flex border-top mt-1 pt-1"><%=lan.Wallet%> :-&nbsp;<p class="invosymbol"><%=customer.wallet%></p></span>
+                                <span class="d-flex border-top mt-1 pt-1"><%=lan.Status%> :-&nbsp;
+                                  <% if (customer.status == '1') { %>
+                                    <span class="badge badge-success" style="padding: 3px 4px 3px 4px;"><%=lan.Active%></span>
+                                  <% } else { %>
+                                    <span class="badge badge-danger" style="padding: 3px 4px 3px 4px;"><%=lan.Deactive%></span>
+                                  <% } %>
+                                </span>
+                                <span class="d-flex border-top mt-1 pt-1"><%=lan.Total%> <%=lan.Review%> :-&nbsp;
+                                    <p class="p-r-20"><%=customer.tot_review%></p>
+                                    <span class="badge badge-secondary f-12"><i class="fa fa-star"></i> <%=customer.avg_star%>/5</span>
+                                </span>
+                                </div>
+                            </div>
+                            <ul class="nav main-menu" role="tablist">
+                              <li class="pb-3">
+                                <hr class="h-25">
+                              </li>
+                              <li id="cdpro_publish_ride" data-drid="<%=customer.id%>"><a class="show active" id="publish-ride-tab" data-bs-toggle="pill" href="#publish-ride" role="tab" aria-controls="publish-ride" aria-selected="true"><span class="title">Publish Ride</span></a></li>
+                              <li id="cdpro_my_ride" data-drid="<%=customer.id%>"><a class="show" id="my-ride-tab" data-bs-toggle="pill" href="#my-ride" role="tab" aria-controls="my-ride" aria-selected="false"><span class="title">My Ride</span></a></li>
+                              <li id="cdpro_wtransaction" data-drid="<%=customer.id%>"><a class="show" id="wallet-transaction-tab" data-bs-toggle="pill" href="#wallet-transaction" role="tab" aria-controls="wallet-transaction" aria-selected="false"><span class="title">Wallet Transactions</span></a></li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xxl-9 col-xl-8 col-md-12 box-col-8">
+                  <div class="email-right-aside bookmark-tabcontent">
+                    <div class="card email-body">
+                      <div class="ps-0">
+                        <div class="tab-content">
+                          
+                          <div class="tab-pane fade active show" id="publish-ride" role="tabpanel" aria-labelledby="publish-ride-tab">
+                            <div class="card mb-0">
+                              <div class="card-header d-flex">
+                                <h4 class="mb-0">Publish Ride</h4>
+                              </div>
+                              <div class="card-body">
+                                <div class="details-bookmark text-center dri_publish_ride">
+                                    <div class="row" id="favouriteData">
+                                        <div class="table-responsive theme-scrollbar">
+                                            <table class="display" id="basic-1">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Ride ID</th>
+                                                        <th>Pickup</th>
+                                                        <th>Drop-Off</th>
+                                                        <th>Date</th>
+                                                        <th>Ride Status</th>
+                                                    </tr>
+                                                </thead>
+                                            <tbody>
+                                                <% public.forEach((data) => { %>
+                                                    <tr>
+                                                        <td>#<%=data.id%></td>
+                                                        <td><%=data.pic_address%></td>
+                                                        <td><%=data.drop_address%></td>
+                                                        <td><%=data.start_time%></td>
+                                                        <td>1</td>
+                                                    </tr>
+                                                <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="fade tab-pane" id="my-ride" role="tabpanel" aria-labelledby="my-ride-tab">
+                            <div class="card mb-0">
+                              <div class="card-header d-flex">
+                                <h4 class="mb-0">My Ride</h4>
+                              </div>
+                              <div class="card-body">
+                                <div class="details-bookmark text-center dri_my_ride">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="fade tab-pane" id="wallet-transaction" role="tabpanel" aria-labelledby="wallet-transaction-tab">
+                            <div class="card mb-0">
+                              <div class="card-header d-flex">
+                                <h4 class="mb-0">Wallet Transaction</h4>
+                              </div>
+                              <div class="card-body">
+                                <div class="details-bookmark text-center dri_wtransaction">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+    <%- include('./partials/footer'); -%>
+    <%- include('./partials/script'); -%>
+    <!-- <script src="../../js/counter/jquery.waypoints.min.js"></script>
+    <script src="../../js/counter/jquery.counterup.min.js"></script>
+    <script src="../../js/counter/counter-custom.js"></script>
+    <script src="../../js/photoswipe/photoswipe.min.js"></script>
+    <script src="../../js/photoswipe/photoswipe-ui-default.min.js"></script> -->
+    <!-- <script src="../../js/photoswipe/photoswipe.js"></script> -->
+  </body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=lan.Edit%> <%=lan.Pages%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Pages%></li>
+                    <li class="breadcrumb-item active"><%=lan.Edit%> <%=lan.Pages%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-body">
+                    <form  class="needs-validation" novalidate="" action="/settings/edit_pages_data/<%= page[0].id%>" method="post">
+                      <div class="row">
+
+                        <div class="col-12 form-group">
+                            <label class="form-label"><%=lan.Title%></label>
+                            <input class="form-control" type="text" value="<%= page[0].title%>" name="title" placeholder="<%=lan.Enter%> <%=lan.Title%>" required>
+                        </div>
+
+                        <div class="col-12 form-group">
+                            <label class="col-form-label"><%=lan.Status%></label>
+                            <select class="js-example-basic-single" name="status" required>
+                                <option value="1" <%= page[0].status == '1' ? 'selected' : '' %> selected><%= lan.Active %></option>
+                                <option value="0" <%= page[0].status == '0' ? 'selected' : '' %>><%= lan.Deactive %></option>
+                            </select>
+                        </div>
+
+                        <div class="col-12 form-group">
+                            <label class="form-label"><%=lan.Description%></label>
+                            <textarea class="form-control" name="description" rows="15"><%= page[0].description%></textarea>
+                        </div>
+
+                        </div>
+                        <div class="text-end mt-5">
+                          <button class="btn btn-square btn-primary btn-air-primary add_detail_btn b-r-10" id="socketchange" type="submit"><%=lan.Submit%></button> 
+                        </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <%- include('./partials/footer'); -%>
+        <%- include('./partials/script'); -%>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="../../socket_function.js"></script>
+  </body>
+</html>

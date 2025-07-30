@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3> <%=lan.Add%> <%=lan.Category%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Category%></li>
+                    <li class="breadcrumb-item active"><%=lan.Add%> <%=lan.Category%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-body">
+                    <form  class="needs-validation" novalidate="" action="/outstation/add_categorydata" method="post" enctype="multipart/form-data">
+                      <div class="row">
+
+                        <div class="col-12">
+                            <div class="text-center form-group">
+                                <img id="file-preview" width="150" height="150" src="../images/dashboard/default/profile.png" alt="image">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                            <label class="col-form-label"><%=lan.image%></label>
+                            <input class="form-control" style="height: 47px;" type="file" name="image" onchange="showPreview(event)">
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Title%></label>
+                          <input class="form-control" type="text" name="title" placeholder="<%=lan.Enter%> <%=lan.Name%>" required>
+                        </div>
+
+                        <div class="col-12 form-group">
+                            <label class="col-form-label"><%=lan.Description%></label>
+                            <textarea class="form-control" name="description" style="width: 100%; height: 150px;"></textarea>
+                        </div>
+
+                    </div>
+                    <div class="text-end mt-5">
+                      <button class="btn btn-square btn-primary btn-air-primary add_detail_btn b-r-10" type="submit"><%=lan.Submit%></button> 
+                    </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <%- include('./partials/footer'); -%>
+        <%- include('./partials/script'); -%>
+  </body>
+</html>

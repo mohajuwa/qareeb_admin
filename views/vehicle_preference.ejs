@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                    <h3><%=lan.Vehicle%> <%=lan.Preference%></h3>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                        <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                        <li class="breadcrumb-item active"><%=lan.Vehicle%> <%=lan.Preference%></li>
+                    </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <% let permiss = per != "1" ? per.vehicle_pre[1] : "1" %>
+                        <% if(permiss == "1"){ %>
+                        <div class="card-header d-flex justify-content-end pb-0">
+                            <button class="btn btn-square btn-primary b-r-10" type="button" data-bs-toggle="modal" data-bs-target="#add_preference"><%=lan.Add%> <%=lan.Vehicle%> <%=lan.Preference%></button>
+                        </div>
+                        <% } %>
+                        <div class="card-body">
+                            <div class="table-responsive theme-scrollbar">
+                                <table class="display" id="basic-1">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th><%=lan.Image%></th>
+                                            <th><%=lan.Name%></th>
+                                            <th><%=lan.Status%></th>
+                                            <% let permissions = per != "1" ? per.vehicle_pre[2] : "1" %>
+                                            <% if(permissions == "1"){ %>
+                                            <th><%=lan.Action%></th>
+                                            <% } %>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% var i = 1 %>
+                                        <% preference_list.forEach((data) => { %>
+                                            <tr>
+                                                <td><%= i %></td>
+                                                <td class="p-1">
+                                                    <% if(data.image == null){ %>
+                                                      <img class="p-0" width="50px" height="50px" src="../images/dashboard/default/profile.png" alt="image">
+                                                    <% } else { %>
+                                                      <img class="p-0" width="50px" height="50px" src="../../<%= data.image %>" alt="image">
+                                                    <% }; %>
+                                                </td>
+                                                <td><%= data.name %></td>
+                                                <td>
+                                                    <% if (data.status == '1') { %>
+                                                        <span class="badge badge-success"><%=lan.Active%></span>
+                                                    <% } else { %>
+                                                        <span class="badge badge-danger"><%=lan.Deactive%></span>
+                                                    <% } %>
+                                                </td>
+                                                <% if(permissions == "1"){ %>
+                                                <td> 
+                                                    <ul class="action"> 
+                                                    <li class="edit"><a data-bs-toggle="modal" data-bs-target="#edit_preference" id="edit_prefrencedata" data-id="<%= data.id %>" 
+                                                        data-image="<%= data.image %>" data-name="<%= data.name %>" data-status="<%= data.status %>"><i class="icon-pencil-alt"></i></a></li>
+                                                    <li class="delete"><a href="/driver/delete_preference/<%= data.id %>"><i class="icon-trash"></i></a></li>
+                                                    </ul>
+                                                </td>
+                                                <% } %>
+                                            </tr>
+                                        <% i++ %>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+
+
+        <div class="modal fade" id="add_preference" tabindex="-1" role="dialog" aria-labelledby="add_preference" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><%=lan.Add%> <%=lan.Vehicle%> <%=lan.Preference%></h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form  class="needs-validation" novalidate="" action="/driver/add_preference" method="post" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="text-center form-group">
+                                        <img class="dricheck" id="file-preview" width="150" height="150" src="../images/dashboard/default/profile.png" alt="image">
+                                    </div>
+                                </div>
+        
+                                <div class="col-12">
+                                    <label class="col-form-label"><%=lan.image%></label>
+                                    <input class="form-control" style="height: 47px;" type="file" name="image" onchange="showPreview(event)">
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label"><%=lan.Name%></label>
+                                    <input class="form-control" type="text" name="name" placeholder="<%=lan.Enter%> <%=lan.Field%> <%=lan.Name%>">
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="d-flex ">
+                                        <div class="icon-state switch-outline">
+                                            <label class="switch">
+                                                <input type="checkbox" name="status"><span class="switch-state bg-success"></span>
+                                            </label>
+                                        </div>
+                                        <label class="col-form-label m-l-10"><%=lan.Status%></label>
+                                    </div>
+                                </div> 
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%=lan.Close%></button>
+                            <button class="btn btn-primary" type="submit"><%=lan.Save%></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="edit_preference" tabindex="-1" role="dialog" aria-labelledby="edit_preference" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><%=lan.Edit%> <%=lan.Vehicle%> <%=lan.Preference%></h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form  class="needs-validation" id="edit_pre_form" action="" method="post" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="text-center form-group">
+                                        <img class="edit_pre_image" id="second-file-preview" width="150" height="150" src="../images/dashboard/default/profile.png" alt="image">
+                                    </div>
+                                </div>
+        
+                                <div class="col-12">
+                                    <label class="col-form-label"><%=lan.image%></label>
+                                    <input class="form-control" style="height: 47px;" type="file" name="image" onchange="secondshowPreview(event)">
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label"><%=lan.Name%></label>
+                                    <input class="form-control" type="text" id="edit_pre_name" name="name" placeholder="<%=lan.Enter%> <%=lan.Field%> <%=lan.Name%>">
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="d-flex ">
+                                        <div class="icon-state switch-outline">
+                                            <label class="switch">
+                                                <input type="checkbox" id="edit_pre_status" name="status"><span class="switch-state bg-success"></span>
+                                            </label>
+                                        </div>
+                                        <label class="col-form-label m-l-10"><%=lan.Status%></label>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%=lan.Close%></button>
+                            <button class="btn btn-primary" type="submit"><%=lan.Save%></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    <%- include('./partials/footer'); -%>
+    <%- include('./partials/script'); -%>
+    </body>
+</html>

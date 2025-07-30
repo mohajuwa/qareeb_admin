@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=lan.Payout%> <%=lan.List%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Payout%> <%=lan.List%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive theme-scrollbar">
+                                <table class="display" id="basic-1">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th><%=lan.Payment%> <%=lan.Image%></th>
+                                            <th><%=lan.Date%></th>
+                                            <th><%=lan.Amount%></th>
+                                            <th><%=lan.Email%></th>
+                                            <th><%=lan.Payout%> <%=lan.Type%></th>
+                                            <% let permissions = per != "1" ? per.payout_list[1] : "1" %>
+                                            <% if(permissions == "1"){ %>
+                                            <th><%=lan.Status%></th>
+                                            <% } %>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                      <% var i = 1 %>
+                                        <% payout_list.forEach((data) => { %>
+                                            <tr>
+                                                <td><%= i %></td>
+                                                <td class="p-1">
+                                                  <% if(data.image != ""){ %>
+                                                    <a href="../../<%= data.image %>" target="_blank"><img width="50px" height="50px" src="../../<%= data.image %>" alt="image"></a>
+                                                  <% }; %>
+                                                </td>
+                                                <td><%= data.date %></td>
+                                                <td class="invosymbol"><%= data.amount %></td>
+                                                <td><%= data.dri_email %></td>
+                                                <td>
+                                                  <% if(data.p_type == "1"){ %>
+                                                    <span><%=lan.UPI%></span>
+                                                  <% } else if (data.p_type == "2") { %>
+                                                    <span><%=lan.Paypal%></span>
+                                                  <% } else if (data.p_type == "3") { %>
+                                                    <span><%=lan.Bank_Transfer%></span>
+                                                  <% }; %>
+                                                </td>
+                                                <% if(permissions == "1"){ %>
+                                                <td>
+                                                  <% if(data.status == "0"){ %>
+                                                    <button class="btn btn-square btn-warning p-1 px-2" data-bs-toggle="modal" data-bs-target="#complete_payment" id="complete_wpayment" data-id="<%= data.id %>"
+                                                        data-p_type="<%= data.p_type %>" data-upi_id="<%= data.upi_id %>" data-paypal_id="<%= data.paypal_id %>" data-bank_no="<%= data.bank_no %>"
+                                                        data-bank_ifsc="<%= data.bank_ifsc %>" data-bank_type="<%= data.bank_type %>"><%=lan.Action%></button>
+                                                  <% } else { %>
+                                                    <span class="btn btn-square btn-primary p-1 px-2"><%=lan.Complete%></span>
+                                                  <% }; %>
+                                                </td>
+                                                <% } %>
+                                            </tr>
+                                        <% i++ %>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <div class="modal fade" id="complete_payment" tabindex="-1" role="dialog" aria-labelledby="complete_payment" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><%=lan.Payment%> <%=lan.Detail%></h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form  class="needs-validation" id="petsize_edit_form" novalidate="" action="/settings/add_wpayment" method="post" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <div class="row g-3">
+
+                                <div class="col-12 d-none" id="pay_urp">
+                                    <h5><%=lan.UPI%> <%=lan.Id%> :- <span class="f-w-400 pupi_data"></span></h5>
+                                </div>
+                                
+                                <div class="col-12 d-none" id="pay_paypal">
+                                    <h5><%=lan.Paypal%> <%=lan.Id%> :- <span class="f-w-400 ppaypal_data"></span></h5>
+                                </div>
+
+                                <div class="col-12 d-none" id="pay_account">
+                                    <h5><%=lan.Bank%> <%=lan.Account%> <%=lan.No%> :- <span class="f-w-400 pbankac_data"></span></h5>
+                                    <h5 class="mt-2"><%=lan.IFSC%> <%=lan.Code%> :- <span class="f-w-400 pifsc_data"></span></h5>
+                                    <h5 class="mt-2"><%=lan.Bank%> <%=lan.Account%> <%=lan.Type%> :- <span class="f-w-400 pactype_data"></span></h5>
+                                </div>
+
+                                <div class="col-12 text-center mb-0 form-group border-top pt-3">
+                                    <img id="file-preview" width="150" height="150" src="../images/dashboard/default/profile.png" alt="image">
+                                </div>
+                                <div class="col-12 mt-0 form-group">
+                                    <label class="col-form-label"><%=lan.Upload%> <%=lan.img%></label>
+                                    <input class="form-control" style="height: 47px;" type="file" name="image" onchange="showPreview(event)" required>
+                                </div>
+                                <input type="hidden" id="payment_sid" name="payment_sid" value="">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%=lan.Close%></button>
+                            <button class="btn btn-primary" type="submit"><%=lan.Save%></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    <%- include('./partials/footer'); -%>
+    <%- include('./partials/script'); -%>
+  </body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=driver[0].first_name%> <%=driver[0].last_name%> <span class="f-18 f-w-500"><%=lan.Document%></span></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Driver%> <%=lan.Document%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <% if(notfield != ""){ %>
+                            <% let permiss = per != "1" ? per.doc_setting[1] : "1" %>
+                            <% if(permiss == "1"){ %>
+                            <div class="card-header d-flex justify-content-end pb-0">
+                                <a class="btn btn-square btn-primary b-r-10" type="button" href="/driver/add_ddocument/<%=driver[0].id%>&<%=notfield%>"><%=lan.Add%> <%=lan.Document%></a>
+                            </div>
+                            <% }; %>
+                        <% }; %>
+                        <div class="card-body">
+                            <div class="table-responsive theme-scrollbar">
+                                <table class="display" id="basic-1">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th><%=lan.Image%></th>
+                                            <th><%=lan.Document%> <%=lan.Name%></th>
+                                            <th><%=lan.Document%> <%=lan.Number%></th>
+                                            <th><%=lan.Approved%></th>
+                                            <% let permissions = per != "1" ? per.doc_setting[2] : "1" %>
+                                            <% if(permissions == "1"){ %>
+                                            <th><%=lan.Action%></th>
+                                            <% }; %>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% var i = 1 %>
+                                        <% driver_doc.forEach((data) => { %>
+                                            <tr>
+                                                <td><%= i %></td>
+                                                <td class="p-1">
+                                                    <% for (let i = 0; i < data.newimage.length;){ %>
+                                                        <a target="_blank" href="../../<%= data.newimage[i] %>"><img class="p-0" width="50px" height="50px" src="../../<%= data.newimage[i] %>" alt="image"></a>
+                                                    <% i++ %>
+                                                    <% }; %>
+                                                </td>
+                                                <td><%= data.dname %></td>
+                                                <td><%= data.document_number %></td>
+                                                <td>
+                                                    <% if (data.status == '') { %>
+                                                        <span class="badge badge-danger"><%=lan.Pending%></span>
+                                                    <% } else if (data.status == '1') { %>
+                                                        <span class="badge badge-success"><%=lan.Approved%></span>
+                                                    <% } else if (data.status == '0') { %>
+                                                        <span class="badge badge-danger"><%=lan.Unapproved%></span>
+                                                    <% } %>
+                                                </td>
+                                                <% if(permissions == "1"){ %>
+                                                <td>
+                                                    <ul class="action"> 
+                                                    <li class="edit"><a data-bs-toggle="modal" data-bs-target="#edit_ddocument" id="edit_ddocumentdata" data-id="<%= data.id %>" 
+                                                        data-image="<%= data.image %>" data-driver_id="<%= data.driver_id %>" data-document_id="<%= data.document_id %>" 
+                                                        data-document_number="<%= data.document_number %>" data-status="<%= data.status %>" data-imgside="<%= data.imgside %>"
+                                                        data-impreq="<%= data.impreq %>" data-inpname="<%= data.inpname %>"><i class="icon-pencil-alt"></i></a></li>
+                                                    <li class="delete"><a href="/driver/delete_documentdata/<%= data.id %>"><i class="icon-trash"></i></a></li>
+                                                    </ul>
+                                                </td>
+                                                <% } %>
+                                            </tr>
+                                        <% i++ %>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <div class="modal fade bd-example-modal-lg" id="edit_ddocument" tabindex="-1" role="dialog" aria-labelledby="edit_ddocument" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><%=lan.Edit%> <%=lan.Driver%> <%=lan.Document%></h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form  class="needs-validation" id="edit_doc_form" action="" method="post" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <div class="row g-3">   
+
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6" id="edit_docfirstimg">
+                                            <div class="col-12">
+                                                <div class="text-center form-group">
+                                                    <img id="firstfile-preview" width="150" height="150" src="../images/dashboard/default/profile.png" alt="image">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="col-form-label"><%=lan.Front%> <%=lan.image%></label>
+                                                <input class="form-control" id="firstimg" style="height: 47px;" type="file" name="frontimage" onchange="secondshowPreview(event)">
+                                            </div>
+                                        </div>
+        
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6" id="edit_docsecounimg">
+                                            <div class="col-12">
+                                                <div class="text-center form-group">
+                                                    <img id="secondfile-preview" width="150" height="150" src="../images/dashboard/default/profile.png" alt="image">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="col-form-label"><%=lan.Back%> <%=lan.image%></label>
+                                                <input class="form-control" id="secimage" style="height: 47px;" type="file" name="secoundimage" onchange="secondshowPreview(event)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 d-none" id="docfinput">
+                                    <label class="form-label" id="editdocinname"></label>
+                                    <input class="form-control" type="text" id="edit_pre_name" name="fname" placeholder="<%=lan.Enter%> <%=lan.Field%> <%=lan.Name%>">
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex justify-content-center">
+                                    <div>
+                                        <label class="form-label"></label>
+                                        <div class="d-flex ">
+                                            <label class="col-form-label m-r-10"> <%=lan.Unapproved%></label>
+                                            <div class="icon-state switch-outline">
+                                                <label class="switch">
+                                                    <input type="checkbox" id="edit_doc_status" name="status"><span class="switch-state bg-success"></span>
+                                                </label>
+                                            </div>
+                                            <label class="col-form-label m-l-10"><%=lan.Approved%></label>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%=lan.Close%></button>
+                            <button class="btn btn-primary" type="submit"><%=lan.Save%></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    <%- include('./partials/footer'); -%>
+    <%- include('./partials/script'); -%>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/frontend_head'); -%>
+    
+</head>
+<body onload="offdarkmode()">
+  <!-- Loader starts-->
+  <div class="loader-wrapper">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"> </div>
+    <div class="dot"></div>
+  </div>
+  <!-- Loader ends-->
+  <!-- login page start-->
+  <div class="container-fluid p-0">
+    <div class="row m-0">
+      <div class="col-12 p-0">    
+        <div class="login-card">
+          <div>
+            <div class="login-main" style="width: 650px;"> 
+              <form class="theme-form" action="/login" method="post">
+                <h4 class="text-center">Sign in to account</h4>
+                <p class="text-center">Enter your Mobile No & password to login</p>
+                <div class="form-group">
+                  <label class="col-form-label">Email</label>
+                  <div class="form-input position-relative">
+                    <input class="form-control" type="email" name="email"  placeholder="Enter Email Id" required>
+                  </div>
+                  <!-- <div class="row">
+                      <div class="col-4">
+                          <select class="js-example-basic-single" id="country_code" name="country_code" required>
+                              <option value selected disabled>Country List</option>
+                              <% CountryCode.forEach((data, x) => { %>
+                                  <option value="<%= data %>"> <%= nameCode[x] %> <%= data %> </option>
+                              <% }) %>
+                          </select>
+                      </div>
+                      <div class="col-8">
+                          <input class="form-control" type="number" name="phone" placeholder="Enter Mobile No." required>
+                      </div>
+                  </div> -->
+                </div>
+                <div class="form-group">
+
+                  <label class="col-form-label">Password</label>
+                  <div class="form-input position-relative">
+                    <input class="form-control" type="password" name="password"  placeholder="*********" required>
+                    <div class="show-hide"><span class="show"></span></div>
+                  </div>
+                </div>
+                <div class="form-group mb-0">
+                  <div class="checkbox p-0">
+                    <input id="checkbox1" type="checkbox">
+                    <label class="text-muted" for="checkbox1">Remember password</label>
+                  </div>
+                  <!-- <a class="link" href="">Forgot password?</a> -->
+                  <div class="text-end mt-1">
+                    <button class="btn btn-primary btn-block w-100" type="submit">Sign in</button>
+                  </div>
+                </div>
+
+                <div class="my-4 text-center mt-5">
+                  <button class="btn btn-outline-primary-2x btn-square b-r-10 " id="login_admin">Admin</button>
+                  <!-- <button class="btn btn-outline-primary-2x btn-square b-r-10 " id="login_sitter">Sitter</button> -->
+                  <button class="btn btn-outline-primary-2x btn-square b-r-10 " id="login_role">Role</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('./partials/script'); -%>
+
+
+</body>
+</html>

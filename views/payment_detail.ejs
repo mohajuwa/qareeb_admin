@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=lan.Payment%> <%=lan.List%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Payment%> <%=lan.List%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive theme-scrollbar">
+                                <table class="display" id="basic-1">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th><%=lan.Gateway%> <%=lan.Image%></th>
+                                            <th><%=lan.Payment%> <%=lan.Gateway%> <%=lan.Name%></th>
+                                            <th><%=lan.Payment%> <%=lan.Gateway%> <%=lan.SubTitle%></th>
+                                            <th><%=lan.Payment%> <%=lan.Gateway%> <%=lan.Stats%></th>
+                                            <th><%=lan.Show_on_Wallet%>?</th>
+                                            <% let permissions = per != "1" ? per.payment_list[1] : "1" %>
+                                            <% if(permissions == "1"){ %>
+                                            <th><%=lan.Action%></th>
+                                            <% } %>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% var i = 1 %>
+                                        <% payment_list.forEach((data) => { %>
+                                            <tr>
+                                                <td><%= i %></td>
+                                                <td>
+                                                    <div class="text-center">
+                                                        <% if(data.image == null){ %>
+                                                            <img width="50px" height="50px" src="../images/dashboard/default/profile.png" alt="image">
+                                                        <% } else { %>
+                                                            <img width="50px" height="50px" src="../../<%= data.image %>" alt="image">
+                                                        <% }; %>
+                                                    </div>
+                                                </td>
+                                                <td><%= data.name %></td>
+                                                <td><%= data.sub_title %></td>
+                                                <td>
+                                                    <% if (data.status == '1') { %>
+                                                        <span class="badge badge-success"><%=lan.Publish%></span>
+                                                    <% } else { %>
+                                                        <span class="badge badge-danger"><%=lan.UnPublish%></span>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <% if (data.wallet_status == '1') { %>
+                                                        <span class="badge badge-success"><%=lan.Active%></span>
+                                                    <% } else { %>
+                                                        <span class="badge badge-danger"><%=lan.Deactive%></span>
+                                                    <% } %>
+                                                </td>
+                                                <% if(permissions == "1"){ %>
+                                                <td> 
+                                                    <ul class="action"> 
+                                                    <li class="edit"> <a href="/settings/edit_payment/<%= data.id %>"><i class="icon-pencil-alt"></i></a></li>
+                                                    </ul>
+                                                </td>
+                                                <% } %>
+                                            </tr>
+                                        <% i++ %>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+    <%- include('./partials/footer'); -%>
+    <%- include('./partials/script'); -%>
+  </body>
+</html>

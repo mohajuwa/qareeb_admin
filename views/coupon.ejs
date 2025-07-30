@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                    <h3><%=lan.Coupon%> <%=lan.List%></h3>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                        <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                        <li class="breadcrumb-item active"><%=lan.Document%> <%=lan.Coupon%></li>
+                    </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <% let permiss = per != "1" ? per.coupon[1] : "1" %>
+                        <% if(permiss == "1"){ %>
+                        <div class="card-header d-flex justify-content-end pb-0">
+                            <button class="btn btn-square btn-primary b-r-10" type="button" data-bs-toggle="modal" data-bs-target="#add_coupon"><%=lan.Add%> <%=lan.Coupon%></button>
+                        </div>
+                        <% } %>
+                        <div class="card-body">
+                            <div class="table-responsive theme-scrollbar">
+                                <table class="display" id="basic-1">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th><%=lan.Title%></th>
+                                            <th><%=lan.Coupon%> <%=lan.Code%></th>
+                                            <th><%=lan.Minmum%> <%=lan.Ride%> <%=lan.amount%></th>
+                                            <th><%=lan.Ride%> <%=lan.Discount%></th>
+                                            <th><%=lan.Start%> <%=lan.Date%></th>
+                                            <th><%=lan.End%> <%=lan.Date%></th>
+                                            <% let permissions = per != "1" ? per.coupon[2] : "1" %>
+                                            <% if(permissions == "1"){ %>
+                                            <th><%=lan.Action%></th>
+                                            <% } %>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% var i = 1 %>
+                                        <% coupon_list.forEach((data) => { %>
+                                            <tr>
+                                                <td><%= i %></td>
+                                                <td><%= data.title %></td>
+                                                <td><%= data.code %></td>
+                                                <td class="invosymbol"><%= data.min_amount %></td>
+                                                <td class="invosymbol"><%= data.discount_amount %></td>
+                                                <td>
+                                                    <% let start_date_date = new Date(data.start_date) %>
+                                                    <% let start_date_day = (start_date_date.getDate() < 10 ? '0' + parseInt(start_date_date.getDate()) : start_date_date.getDate()) %>
+                                                    <% let start_date_month = (start_date_date.getMonth()+1 < 10 ? '0' + parseInt(start_date_date.getMonth()+1) : start_date_date.getMonth()+1) %>
+                                                    <% let start_date_year = start_date_date.getFullYear() %>
+                                                    <% let start_date = `${start_date_day}-${start_date_month}-${start_date_year}` %>
+                                                    <%= start_date %>
+                                                </td>
+                                                <td>
+                                                    <% let end_date_date = new Date(data.end_date) %>
+                                                    <% let end_date_day = (end_date_date.getDate() < 10 ? '0' + parseInt(end_date_date.getDate()) : end_date_date.getDate()) %>
+                                                    <% let end_date_month = (end_date_date.getMonth()+1 < 10 ? '0' + parseInt(end_date_date.getMonth()+1) : end_date_date.getMonth()+1) %>
+                                                    <% let end_date_year = end_date_date.getFullYear() %>
+                                                    <% let end_date = `${end_date_day}-${end_date_month}-${end_date_year}` %>
+                                                    <%= end_date %>
+                                                </td>
+                                                <% if(permissions == "1"){ %>
+                                                <td> 
+                                                    <ul class="action"> 
+                                                        <li class="edit"><a data-bs-toggle="modal" data-bs-target="#edit_couponmodal" id="edit_coupon" data-id="<%= data.id %>" data-sub_title="<%= data.sub_title %>"
+                                                            data-title="<%= data.title %>" data-code="<%= data.code %>" data-min_amount="<%= data.min_amount %>" data-discount_amount="<%= data.discount_amount %>"
+                                                            data-start_date="<%= data.start_date %>" data-end_date="<%= data.end_date %>"><i class="icon-pencil-alt"></i></a></li>
+                                                        <li class="delete"><a href="/coupon/delete/<%= data.id %>"><i class="icon-trash"></i></a></li>
+                                                    </ul>
+                                                </td>
+                                                <% } %>
+                                            </tr>
+                                        <% i++ %>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+
+
+        <div class="modal fade bd-example-modal-lg" id="add_coupon" tabindex="-1" role="dialog" aria-labelledby="add_coupon" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><%=lan.Add%> <%=lan.Coupon%></h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form  class="needs-validation" novalidate="" action="/coupon/add_coupon" method="post">
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                                    <label class="form-label"><%=lan.Coupon%> <%=lan.Title%></label>
+                                    <input class="form-control" type="text" name="title" placeholder="<%=lan.Enter%> <%=lan.Coupon%> <%=lan.Title%>" required>
+                                </div>
+                                <div class="col-sm-5 col-md-3 col-lg-3 col-xl-4">
+                                    <label class="form-label"><%=lan.Coupon%> <%=lan.Code%></label>
+                                    <input class="form-control" type="text" name="code" id="coupon_code" placeholder="<%=lan.Enter%> <%=lan.Coupon%> <%=lan.Code%>" required>
+                                </div>
+                                <div class="col-sm-6 col-md-3 col-lg-3 col-xl-4 pt-1">
+                                    <button class="btn btn-square b-r-5 btn-primary mt-4" type="button" id="gen_code"><%=lan.Generated%> <%=lan.Code%></button>
+                                </div>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <label class="form-label"><%=lan.Coupon%> <%=lan.Sub%> <%=lan.Title%></label>
+                                    <input class="form-control" type="text" name="sub_title" placeholder="<%=lan.Enter%> <%=lan.Coupon%> <%=lan.Sub%> <%=lan.Title%>" required>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                    <label class="form-label"><%=lan.Start%> <%=lan.Date%></label>
+                                    <input class="form-control" type="date" name="start_date" required>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                    <label class="form-label"><%=lan.Expire%> <%=lan.Date%></label>
+                                    <input class="form-control" type="date" name="end_date" required>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                    <label class="form-label"><%=lan.Minmum%> <%=lan.Ride%> <%=lan.amount%></label>
+                                    <input class="form-control" type="number" name="min_amount" placeholder="<%=lan.Enter%> <%=lan.Minmum%> <%=lan.Ride%> <%=lan.amount%>" required>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                    <label class="form-label"><%=lan.Ride%> <%=lan.Discount%></label>
+                                    <input class="form-control" type="number" name="discount_amount" placeholder="<%=lan.Enter%> <%=lan.Ride%> <%=lan.Discount%>" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%=lan.Close%></button>
+                            <button class="btn btn-primary" type="submit"><%=lan.Save%></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bd-example-modal-lg" id="edit_couponmodal" tabindex="-1" role="dialog" aria-labelledby="edit_couponmodal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><%=lan.Edit%> <%=lan.Coupon%></h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form  class="needs-validation" id="coupon_edit_form" novalidate="" action="" method="post">
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                                    <label class="form-label"><%=lan.Coupon%> <%=lan.Title%></label>
+                                    <input class="form-control" type="text" id="edit_title" name="title" placeholder="<%=lan.Enter%> <%=lan.Coupon%> <%=lan.Title%>" required>
+                                </div>
+                                <div class="col-sm-5 col-md-3 col-lg-3 col-xl-4">
+                                    <label class="form-label"><%=lan.Coupon%> <%=lan.Code%></label>
+                                    <input class="form-control edit_code" type="text" name="code" id="coupon_code" placeholder="<%=lan.Enter%> <%=lan.Coupon%> <%=lan.Code%>" required>
+                                </div>
+                                <div class="col-sm-6 col-md-3 col-lg-3 col-xl-4 pt-1">
+                                    <button class="btn btn-square b-r-5 btn-primary mt-4" type="button" id="gen_code"><%=lan.Generated%> <%=lan.Code%></button>
+                                </div>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <label class="form-label"><%=lan.Coupon%> <%=lan.Sub%> <%=lan.Title%></label>
+                                    <input class="form-control" type="text" id="edit_subtitle" name="sub_title" placeholder="<%=lan.Enter%> <%=lan.Coupon%> <%=lan.Sub%> <%=lan.Title%>" required>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                    <label class="form-label"><%=lan.Start%> <%=lan.Date%></label>
+                                    <input class="form-control" type="date" id="edit_start" name="start_date" required>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                    <label class="form-label"><%=lan.Expire%> <%=lan.Date%></label>
+                                    <input class="form-control" type="date" id="edit_end" name="end_date" required>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                    <label class="form-label"><%=lan.Minmum%> <%=lan.Ride%> <%=lan.amount%></label>
+                                    <input class="form-control" type="number" id="edit_minimuma" name="min_amount" placeholder="<%=lan.Enter%> <%=lan.Minmum%> <%=lan.Ride%> <%=lan.amount%>" required>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                    <label class="form-label"><%=lan.Ride%> <%=lan.Discount%></label>
+                                    <input class="form-control" type="number" id="edit_discounta" name="discount_amount" placeholder="<%=lan.Enter%> <%=lan.Ride%> <%=lan.Discount%>" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%=lan.Close%></button>
+                            <button class="btn btn-primary" type="submit"><%=lan.Save%></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    <%- include('./partials/footer'); -%>
+    <%- include('./partials/script'); -%>
+    </body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=lan.Cash%> <%=lan.Management%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Cash%> <%=lan.Management%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header col-12 pb-0">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 d-flex justify-content-center dborder">
+                                    <h5><%=lan.Available%> <%=lan.Cash%> <%=lan.Amount%> :-&nbsp;<h5 class="invosymbol"><%= tot_cash%></h5></h5>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-2 d-flex justify-content-center dborder">
+                                    <h5><%=lan.Block%> <%=lan.Amount%> :-&nbsp;<h5 class="invosymbol"><%= driver[0].tot_pendinga%></h5></h5>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 d-flex justify-content-center">
+                                    <h5><%=lan.Total%> <%=lan.Cash%> <%=lan.Amount%> :-&nbsp;<h5 class="invosymbol"><%= driver[0].tot_cash%></h5>
+                                        <!-- <a class="m-l-10" id="edit_cash_amount" data-id="<%= driver[0].id%>" data-cash_amount="<%= driver[0].tot_cash%>" data-bs-toggle="modal" data-bs-target="#edit_cash" 
+                                        type="button" href="/driver/add"><i class="icon-pencil-alt f-14 m-0"></i></a> -->
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive theme-scrollbar">
+                                <table class="display" id="basic-1">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th><%=lan.Payment%> <%=lan.Image%></th>
+                                            <th><%=lan.Payment%> <%=lan.Method%></th>
+                                            <th><%=lan.Date%></th>
+                                            <th><%=lan.Amount%></th>
+                                            <th><%=lan.Status%></th>
+                                            <th><%=lan.Action%></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                      <% var i = 1 %>
+                                        <% cash_list.forEach((data) => { %>
+                                            <tr>
+                                                <td><%= i %></td>
+                                                <td class="p-1">
+                                                  <% if(data.prof_image != ""){ %>
+                                                    <a href="../../<%= data.prof_image %>" target="_blank"><img width="50px" height="50px" src="../../<%= data.prof_image %>" alt="image"></a>
+                                                  <% }; %>
+                                                </td>
+                                                <td><%= data.payment_type %></td>
+                                                <td><%= data.date %></td>
+                                                <td class="invosymbol"><%= data.amount %></td>
+                                                <td>
+                                                    <% if (data.status == '1') { %>
+                                                        <span class="badge badge-success"><%=lan.Approved%></span>
+                                                    <% } else { %>
+                                                        <span class="badge badge-danger"><%=lan.Pending%></span>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <ul class="action"> 
+                                                        <li class="edit"><a type="button" data-bs-toggle="modal" data-bs-target="#edit_cash_status_module" id="edit_cash_status" data-id="<%= data.id %>" 
+                                                            data-prof_image="<%= data.prof_image %>" data-payment_type="<%= data.payment_type %>" data-date="<%= data.date %>" 
+                                                            data-amount="<%= data.amount %>" data-status="<%= data.status %>"><i class="icon-pencil-alt"></i></a></li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        <% i++ %>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <div class="modal fade" id="edit_cash" tabindex="-1" role="dialog" aria-labelledby="edit_cash" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><%=lan.Edit%> <%=lan.Cash%> <%=lan.Amount%></h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form  class="needs-validation" id="edit_cash_form" novalidate="" action="" method="post">
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label"><%=lan.Cash%> <%=lan.Amount%></label>
+                                    <input class="form-control" id="cash_amount_input" name="cash_amount" type="number" value="<%=lan.Cash%> <%=lan.Amount%>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%=lan.Close%></button>
+                            <button class="btn btn-primary" type="submit"><%=lan.Update%></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="edit_cash_status_module" tabindex="-1" role="dialog" aria-labelledby="edit_cash_status_module" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><%=lan.Edit%> <%=lan.Cash%> <%=lan.Status%></h5>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form  class="needs-validation" id="cash_edit_status_form" novalidate="" action="" method="post">
+                        <div class="modal-body">
+                            <div class="row g-3">
+                                <div class="col-12 text-center">
+                                    <a id="edit_cash_imga" href="" target="_blank"><img class="p-0" id="edit_cash_img" width="100px" height="100px" src="" alt="image"></a>
+                                </div>
+
+                                <div class="col-12 mt-3">
+                                    <h5><%=lan.Payment%> <%=lan.Method%> :- <span class="f-w-400 cash_pm"></span></h5>
+                                </div>
+
+                                <div class="col-12 mt-1">
+                                    <h5><%=lan.Date%> :- <span class="f-w-400 cash_date"></span></h5>
+                                </div>
+
+                                <div class="col-12 mt-1">
+                                    <h5><%=lan.Amount%> :- <span class="f-w-400 cash_amount"></span></h5>
+                                </div>
+
+                                <div class="col-12 mt-1 d-flex">
+                                    <label class="col-form-label m-r-10"> <%=lan.Status%></label>
+                                    <div class="icon-state switch-outline">
+                                        <label class="switch">
+                                            <input type="checkbox" id="cash_status" name="cash_status"><span class="switch-state bg-success"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"><%=lan.Close%></button>
+                            <button class="btn btn-primary" type="submit"><%=lan.Save%></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    <%- include('./partials/footer'); -%>
+    <%- include('./partials/script'); -%>
+  </body>
+</html>

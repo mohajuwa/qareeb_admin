@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    <!-- <link rel="stylesheet" type="text/css" href="../../css/vendors/bootstrap.css"> -->
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=lan.Driver%> <%=lan.Profile%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Driver%> <%=lan.Profile%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="email-wrap bookmark-wrap user-profile">
+              <div class="row">
+                <div class="col-xxl-3 col-xl-4 box-col-30">
+                  <div class="md-sidebar email-sidebar"><a class="btn btn-primary md-sidebar-toggle" href="javascript:void(0)"><i class="fa fa-list"></i></a>
+                    <div class="md-sidebar-aside email-left-aside">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="email-app-sidebar left-bookmark">
+                            <div class="text-center">
+                              <div class="flex-shrink-0"><img class=" rounded-circle" src="../../<%=driver.profile_image%>" alt="" style="width: 100px; height: 100px;"></div>
+                              <div class="flex-grow-1 mt-2">
+                                <h6 class="f-w-600"><a><%=driver.first_name%> <%=driver.last_name%></a></h6>
+                                <p><%=driver.email%></p>
+                                <div class="d-flex justify-content-center mt-1">
+                                  <p><%=lan.Wallet%> :-&nbsp;<p class="invosymbol"><%=driver.wallet%></p></p> &nbsp;&nbsp;&nbsp;&nbsp;
+                                </div>
+                                <span class="d-flex justify-content-center mt-1">
+                                  <p class="p-r-20"><%=lan.Total%> <%=lan.Review%> :-&nbsp;<%=driver.tot_review%></p>
+                                  <span class="badge badge-secondary f-12"><i class="fa fa-star"></i> <%=driver.avg_star%>/5</span>
+                                </span>
+                              </div>
+                            </div>
+                            <ul class="nav main-menu" role="tablist">
+                              <li>
+                                <hr>
+                              </li>
+                              <li><a class="show active" id="profile-tab" data-bs-toggle="pill" href="#profile" role="tab" aria-controls="profile" aria-selected="true"><span class="title">Profile</span></a></li>
+                              <li id="dpro_publish_ride" data-drid="<%=driver.id%>"><a class="show" id="publish-ride-tab" data-bs-toggle="pill" href="#publish-ride" role="tab" aria-controls="publish-ride" aria-selected="false"><span class="title">Publish Ride</span></a></li>
+                              <li id="dpro_my_ride" data-drid="<%=driver.id%>"><a class="show" id="my-ride-tab" data-bs-toggle="pill" href="#my-ride" role="tab" aria-controls="my-ride" aria-selected="false"><span class="title">My Ride</span></a></li>
+                              <li id="dpro_wtransaction" data-drid="<%=driver.id%>"><a class="show" id="wallet-transaction-tab" data-bs-toggle="pill" href="#wallet-transaction" role="tab" aria-controls="wallet-transaction" aria-selected="false"><span class="title">Wallet Transactions</span></a></li>
+                              <li><a class="show" id="vehicle-detail-tab" data-bs-toggle="pill" href="#vehicle-detail" role="tab" aria-controls="vehicle-detail" aria-selected="false"><span class="title">Vehicle Detail</span></a></li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xxl-9 col-xl-8 col-md-12 box-col-8">
+                  <div class="email-right-aside bookmark-tabcontent">
+                    <div class="card email-body">
+                      <div class="ps-0">
+                        <div class="tab-content">
+                          <div class="tab-pane fade active show" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="card mb-0">
+                              <div class="card-header d-flex">
+                                <h4 class="mb-0">Driver Profile</h4>
+                              </div>
+                              <div class="card-body ">
+                                <div class="details-bookmark text-center">
+                                  <div class="row" id="bookmarkData">
+                                    <div class="col-12 mb-4 text-center">
+                                      <a target="_blank" href="../../<%=driver.profile_image%>"><img class="me-3" src="../../<%=driver.profile_image%>" alt="" style="width: 160px; height: 160px; border-radius: 10px;"></a>
+                                    </div>
+
+                                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 py-3 border-top" >
+                                        <h6><%=lan.Name%> </h6> <span class="f-w-500"><%=driver.first_name%> <%=driver.last_name%></span>
+                                    </div>
+                                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 py-3 border-top">
+                                        <h6><%=lan.Email%> </h6> <span class="f-w-500"><%=driver.email%></span>
+                                    </div>
+                                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 py-3 border-top">
+                                        <h6><%=lan.Primary%> <%=lan.Mobile%> <%=lan.Number%> </h6> <span class="f-w-500"><%=driver.primary_ccode%> <%=driver.primary_phoneNo%></span>
+                                    </div>
+                                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 py-3 border-top">
+                                        <h6><%=lan.Secoundary%> <%=lan.Mobile%> <%=lan.Number%> </h6> <span class="f-w-500"><%=driver.secound_ccode%> <%=driver.secound_phoneNo%></span>
+                                    </div>
+                                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 py-3 border-top">
+                                        <h6><%=lan.Nationality%> </h6> <span class="f-w-500"><%=driver.nationality%></span>
+                                    </div>
+                                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 py-3 border-top">
+                                        <h6><%=lan.Date_of_birth%> </h6> <span class="f-w-500"><%=driver.date_of_birth%></span>
+                                    </div>
+                                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 py-3 border-top">
+                                        <h6><%=lan.Complete%> <%=lan.Address%> </h6> <span class="f-w-500"><%=driver.com_address%></span>
+                                    </div>
+                                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 py-3 border-top">
+                                        <h6><%=lan.Zone%> </h6> <span class="f-w-500"><%=driver.zone_name%></span>
+                                    </div>
+                                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 py-3 border-top">
+                                        <h6><%=lan.Languages_you_know%> </h6> <span class="f-w-500"><%=driver.language%></span>
+                                    </div>
+                                    
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="fade tab-pane" id="publish-ride" role="tabpanel" aria-labelledby="publish-ride-tab">
+                            <div class="card mb-0">
+                              <div class="card-header d-flex">
+                                <h4 class="mb-0">Publish Ride</h4>
+                              </div>
+                              <div class="card-body">
+                                <div class="details-bookmark text-center dri_publish_ride">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="fade tab-pane" id="my-ride" role="tabpanel" aria-labelledby="my-ride-tab">
+                            <div class="card mb-0">
+                              <div class="card-header d-flex">
+                                <h4 class="mb-0">My Ride</h4>
+                              </div>
+                              <div class="card-body">
+                                <div class="details-bookmark text-center dri_my_ride">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="fade tab-pane" id="wallet-transaction" role="tabpanel" aria-labelledby="wallet-transaction-tab">
+                            <div class="card mb-0">
+                              <div class="card-header d-flex">
+                                <h4 class="mb-0">Wallet Transaction</h4>
+                              </div>
+                              <div class="card-body">
+                                <div class="details-bookmark text-center dri_wtransaction_list">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="fade tab-pane" id="vehicle-detail" role="tabpanel" aria-labelledby="vehicle-detail-tab">
+                            <div class="card mb-0">
+                              <div class="card-header d-flex">
+                                <h4 class="mb-0">Vehicle Detail</h4>
+                              </div>
+                              <div class="card-body">
+                                <div class="details-bookmark text-center">
+                                  <div class="row" id="bookmarkData">
+                                    <div class="col-12 mb-4 text-center">
+                                      <a target="_blank" href="../../<%=driver.vehicle_image%>"><img class="me-3" src="../../<%=driver.vehicle_image%>" alt="" style="width: 160px; height: 160px; border-radius: 10px;"></a>
+                                    </div>
+
+                                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 py-3 border-top" >
+                                      <h6><%=lan.Vehicle%> <%=lan.Name%></h6> <span class="f-w-500"><%=driver.vehicle_name%></span>
+                                    </div>
+
+                                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 py-3 border-top" >
+                                      <h6><%=lan.Vehicle%> <%=lan.Registration%> <%=lan.Number%> </h6> <span class="f-w-500"><%=driver.vehicle_number%></span>
+                                    </div>
+
+                                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 py-3 border-top" >
+                                      <h6><%=lan.Car%> <%=lan.Color%> </h6> <span class="f-w-500"><%=driver.car_color%></span>
+                                    </div>
+
+                                    <div class="col-xxl-6 col-xl-4 col-lg-6 col-md-6 col-sm-12 py-3 border-top" >
+                                      <h6><%=lan.Passenger%> <%=lan.Capacity%> </h6> <span class="f-w-500"><%=driver.passenger_capacity%></span>
+                                    </div>
+
+                                    <div class="col-xxl-6 col-xl-4 col-lg-6 col-md-6 col-sm-12 py-3 border-top" >
+                                      <h6><%=lan.Vehicle%> <%=lan.Preference%> </h6> <span class="f-w-500"><%=driver.veh_pref_name%></span>
+                                    </div>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+    <%- include('./partials/footer'); -%>
+    <%- include('./partials/script'); -%>
+    <!-- <script src="../../js/counter/jquery.waypoints.min.js"></script>
+    <script src="../../js/counter/jquery.counterup.min.js"></script>
+    <script src="../../js/counter/counter-custom.js"></script>
+    <script src="../../js/photoswipe/photoswipe.min.js"></script>
+    <script src="../../js/photoswipe/photoswipe-ui-default.min.js"></script> -->
+    <!-- <script src="../../js/photoswipe/photoswipe.js"></script> -->
+  </body>
+</html>

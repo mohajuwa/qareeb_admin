@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=lan.Edit%> <%=lan.Zone%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Edit%> <%=lan.Zone%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form  class="needs-validation" novalidate="" action="/zone/edit_zone" method="post">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                                        <label class="col-form-label"><%=lan.Name%></label>
+                                        <input class="form-control" type="text" name="name" value="<%=zone_data[0].name%>" placeholder="<%=lan.Enter%> <%=lan.Name%>" required>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                                        <label class="col-form-label"><%=lan.Is_Active%></label>
+                                        <select class="js-example-basic-single" name="status" required>
+                                            <option value="1" <%= zone_data[0].status == 1 ? 'selected' : "" %>><%=lan.Active%></option>
+                                            <option value="0" <%= zone_data[0].status == 0 ? 'selected' : "" %>><%=lan.Inactive%></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <div id="map-canvas-edit" style="height: 85vh; width: 100%;"></div>
+                                        <textarea name="zone_lat_lon" id="add_lat_lon" cols="30" rows="10" hidden></textarea>
+                                    </div>
+
+                                    <input type="hidden" name="zone_id" id="zone_id" value="<%=zone_data[0].id%>">
+                                    <input type="hidden" id="old_lat_lon" value="<%=zone_data[0].lat_lon%>">
+
+                                </div>
+                                <div class="text-end mt-5">
+                                  <button class="btn btn-square btn-primary btn-air-primary add_detail_btn b-r-10" type="submit"><%=lan.Submit%></button> 
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <script src="../../js/map_edit.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=<%= general.google_map_key %>&libraries=drawing&callback=initMap"></script>
+
+        <%- include('./partials/footer'); -%>
+        <%- include('./partials/script'); -%>
+  </body>
+</html>

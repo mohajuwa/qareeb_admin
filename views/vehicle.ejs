@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=lan.Vehicle%> <%=lan.List%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Vehicle%> <%=lan.List%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <% let permiss = per != "1" ? per.vehicle[1] : "1" %>
+                        <% if(permiss == "1"){ %>
+                        <div class="card-header d-flex justify-content-end pb-0">
+                            <a class="btn btn-square btn-primary b-r-10" type="button" href="/vehicle/add"><%=lan.Add%> <%=lan.Vehicle%></a>
+                        </div>
+                        <% } %>
+                        <div class="card-body">
+                            <div class="table-responsive theme-scrollbar">
+                                <table class="display" id="basic-1">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th><%=lan.Image%></th>
+                                            <th><%=lan.Name%></th>
+                                            <th><%=lan.Min_KM%> <%=lan.Distance%></th>
+                                            <th><%=lan.Min_KM%> <%=lan.Price%></th>
+                                            <th><%=lan.After_KM%> <%=lan.Price%></th>
+                                            <th><%=lan.Extra%> <%=lan.Charge%></th>
+                                            <th><%=lan.Commission%> <%=lan.Rate%></th>
+                                            <th><%=lan.Commission%> <%=lan.Type%></th>
+                                            <th><%=lan.Bidding_System%></th>
+                                            <th><%=lan.Weather%> <%=lan.change%></th>
+                                            <th><%=lan.Status%></th>
+                                            <% let permissions = per != "1" ? per.vehicle[2] : "1" %>
+                                            <% if(permissions == "1"){ %>
+                                            <th><%=lan.Action%></th>
+                                            <% } %>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% var i = 1 %>
+                                        <% vehicle_list.forEach((data) => { %>
+                                            <tr>
+                                                <td><%= i %></td>
+                                                <td class="p-1">
+                                                    <% if(data.image == null){ %>
+                                                      <img class="p-0" width="50px" height="50px" src="../images/dashboard/default/profile.png" alt="image">
+                                                    <% } else { %>
+                                                      <img class="p-0" width="50px" height="50px" src="../../<%= data.image %>" alt="image">
+                                                    <% }; %>
+                                                </td>
+                                                <td><%= data.name %></td>
+                                                <td class="invosymbol"><%= data.min_km_distance %></td>
+                                                <td class="invosymbol"><%= data.min_km_price %></td>
+                                                <td class="invosymbol"><%= data.after_km_price %></td>
+                                                <td class="invosymbol"><%= data.extra_charge %></td>
+                                                <td class="invosymbol"><%= data.comission_rate %></td>
+                                                <td>
+                                                    <% if (data.comission_type == '%') { %>
+                                                        <span class="badge badge-success"><%=lan.Percentage%></span>
+                                                    <% } else { %>
+                                                        <span class="badge badge-success"><%=lan.FIX%></span>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <% if (data.bidding == '1') { %>
+                                                        <span class="badge badge-success"><%=lan.On%></span>
+                                                    <% } else { %>
+                                                        <span class="badge badge-danger"><%=lan.Off%></span>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <% if (data.whether_charge == '1') { %>
+                                                        <span class="badge badge-success"><%=lan.On%></span>
+                                                    <% } else { %>
+                                                        <span class="badge badge-danger"><%=lan.Off%></span>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <% if (data.status == '1') { %>
+                                                        <span class="badge badge-success"><%=lan.Active%></span>
+                                                    <% } else { %>
+                                                        <span class="badge badge-danger"><%=lan.Deactive%></span>
+                                                    <% } %>
+                                                </td>
+                                                <% if(permissions == "1"){ %>
+                                                <td> 
+                                                    <ul class="action"> 
+                                                    <li class="edit"> <a href="/vehicle/edit/<%= data.id %>"><i class="icon-pencil-alt"></i></a></li>
+                                                    <li class="delete"><a id="socketchange" href="/vehicle/delete/<%= data.id %>"><i class="icon-trash"></i></a></li>
+                                                    </ul>
+                                                </td>
+                                                <% } %>
+                                            </tr>
+                                        <% i++ %>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+    <%- include('./partials/footer'); -%>
+    <%- include('./partials/script'); -%>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../../socket_function.js"></script>
+  </body>
+</html>

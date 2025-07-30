@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    <link rel="stylesheet" type="text/css" href="../../css/timeline.css">
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=lan.Ride%> <%=lan.Detail%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Ride%> <%=lan.Detail%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+
+                <div class="col-sm-12 col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            
+                            <div>
+                                <h5><%=lan.Rider%> <%=lan.Information%></h5>
+                            </div>
+                            <hr style="height: 3px;">
+
+                            <div class="d-flex justify-content-between flex-wrap">
+                                <span><%=lan.Name%> :- </span>
+                                <span><%=rd.cname%></span>
+                            </div>
+                            <hr class="mt-2 mb-2">
+
+                            <div class="d-flex justify-content-between flex-wrap">
+                                <span><%=lan.Email%> :- </span>
+                                <span><%=rd.cemail%></span>
+                            </div>
+                            <hr class="mt-2 mb-2">
+
+                            <div class="d-flex justify-content-between flex-wrap">
+                                <span><%=lan.Mobile%> <%=lan.Number%> :- </span>
+                                <span><%=rd.cccode%> <%=rd.cphone%></span>
+                            </div>
+                            <hr class="mt-2 mb-2">
+
+                            <div class="d-flex justify-content-between flex-wrap">
+                                <span><%=lan.Total%> <%=lan.Ride%> :- </span>
+                                <span><%=rd.tot_order%></span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            
+                            <div>
+                                <h5><%=lan.Driver%> <%=lan.Information%></h5>
+                            </div>
+                            <hr style="height: 3px;">
+
+                            <div class="d-flex justify-content-between flex-wrap">
+                                <span><%=lan.Name%> :- </span>
+                                <span><%=rd.dfname%> <%=rd.dlname%></span>
+                            </div>
+                            <hr class="mt-2 mb-2">
+
+                            <div class="d-flex justify-content-between flex-wrap">
+                                <span><%=lan.Email%> :- </span>
+                                <span><%=rd.demail%></span>
+                            </div>
+                            <hr class="mt-2 mb-2">
+
+                            <div class="d-flex justify-content-between flex-wrap">
+                                <span><%=lan.Mobile%> <%=lan.Number%> :- </span>
+                                <span><%=rd.dpcode%> <%=rd.dpnumber%></span>
+                            </div>
+                            <hr class="mt-2 mb-2">
+
+                            <div class="d-flex justify-content-between flex-wrap">
+                                <span><%=lan.Secoundary%> <%=lan.Mobile%> <%=lan.Number%> :- </span>
+                                <span><%=rd.dscode%> <%=rd.dsnumber%></span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div>
+                                    <h5><%=lan.Ride%> <%=lan.Information%></h5>
+                                    <hr style="height: 3px;">
+                                </div>
+    
+                                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                    <div>
+                                        <h5><%=lan.Ride%> <%=lan.Id%></h5>
+                                        <span>#<%=rd.id%></span>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h5><%=lan.Amount%></h5>
+                                        <span class="invosymbol"><%=rd.price%></span>
+                                    </div>
+                                </div>
+    
+                                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 ul_padding">
+                                    <div>
+                                        <h5><%=lan.Service%></h5>
+                                        <span><%=rd.vehicle_name%></span>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h5><%=lan.Status%></h5>
+                                        <% if (rd.status == '0') { %>
+                                            <span class="badge badge-warning p-2"><%=lan.New%> <%=lan.Ride%></span>
+                                        <% } else if (rd.status == '1') { %>
+                                            <span class="badge badge-warning p-2"><%=lan.Accept%> <%=lan.Ride%></span>
+                                        <% } else if (rd.status == '2') { %>
+                                            <span class="badge badge-warning p-2"><%=lan.Arrived_at_the_location%></span>
+                                        <% } else if (rd.status == '3') { %>
+                                            <span class="badge badge-warning p-2"><%=lan.Confirm%> <%=lan.Ride%></span>
+                                        <% } else if (rd.status == '4') { %>
+                                            <span class="badge badge-danger p-2"><%=lan.Ride%> <%=lan.Cancel%></span>
+                                        <% } else if (rd.status == '5') { %>
+                                            <span class="badge badge-warning p-2"><%=lan.Ride%> <%=lan.Start%></span>
+                                        <% } else if (rd.status == '6') { %>
+                                            <span class="badge badge-warning p-2"><%=lan.Ride%> <%=lan.End%></span>
+                                        <% } else if (rd.status == '7') { %>
+                                            <span class="badge badge-warning p-2"><%=lan.Waiting%> <%=lan.Payment%></span>
+                                        <% } else if (rd.status == '8') { %>
+                                            <span class="badge badge-success p-2"><%=lan.Complete%></span>
+                                        <% }; %>
+                                    </div>
+                                </div>
+    
+                                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 ul_padding">
+                                    <div>
+                                        <h5><%=lan.Ride%> <%=lan.Type%></h5>
+                                        <% if (rd.bidding_status == '1') { %>
+                                            <span class="badge badge-success p-2"><%=lan.Bidding%></span>
+                                        <% } else { %>
+                                            <span class="badge badge-success p-2"><%=lan.Normal%></span>
+                                        <% }; %>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-sm-12 col-md-6 col-lg-5 col-xl-5">
+                                    <div>
+                                        <h5><%=lan.Location%> <%=lan.Information%></h5>
+                                        <hr style="height: 3px;">
+                                    </div>
+                                    <div class="d-flex justify-content-between flex-wrap">
+                                        <span><%=lan.Distance%> :- </span>
+                                        <span><%=rd.tot_km%> <%=lan.KM%></span>
+                                    </div>
+                                    <hr class="mt-2 mb-2">
+        
+                                    <div class="d-flex justify-content-between flex-wrap">
+                                        <span><%=lan.Ride%> <%=lan.start%> <%=lan.Time%> :- </span>
+                                        <span><%=rd.start_time%></span>
+                                    </div>
+                                    <hr class="mt-2 mb-2">
+        
+                                    <div class="d-flex justify-content-between flex-wrap">
+                                        <span><%=lan.Ride%> <%=lan.End%> <%=lan.Time%> :- </span>
+                                        <span><%=rd.end_time%></span>
+                                    </div>
+                                    <hr class="mt-2 mb-2">
+        
+                                    <div class="d-flex justify-content-between flex-wrap">
+                                        <span><%=lan.Duration%> :- </span>
+                                        <span><%=rd.status_time%>  <%=lan.Hour%></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-0 col-md-0 col-lg-2 col-xl-2"></div>
+
+                                <div class="col-sm-12 col-md-6 col-lg-5 col-xl-5 ul_padding">
+                                    <div>
+                                        <h5><%=lan.Payment%> <%=lan.Information%></h5>
+                                        <hr style="height: 3px;">
+                                    </div>
+                                    <div class="d-flex justify-content-between flex-wrap">
+                                        <span><%=lan.Payment%> <%=lan.Type%> :- </span>
+                                        <span><%=rd.pay_name%> <%=lan.Payment%></span>
+                                    </div>
+                                    <hr class="mt-2 mb-2">
+        
+                                    <div class="d-flex justify-content-between flex-wrap">
+                                        <span><%=lan.Payment%> <%=lan.Status%> :- </span>
+                                        <% if ( rd.status != "8" ) { %>
+                                            <span class="badge badge-warning p-1 f-14"><%=lan.Pending%></span>
+                                        <% } else { %>
+                                            <span class="badge badge-success p-1 d-flex align-content-center f-14"><%=lan.Paid%></span>
+                                        <% }; %>
+                                    </div>
+                                    <hr class="mt-2 mb-2">
+        
+                                    <div class="d-flex justify-content-between flex-wrap">
+                                        <span><%=lan.Amount%> :- </span>
+                                        <span class="invosymbol"><%=rd.price%></span>
+                                    </div>
+                                    <hr class="mt-2 mb-2">
+        
+                                    <div class="d-flex justify-content-between flex-wrap">
+                                        <span><%=lan.Commission%> <%=lan.Amount%> :- </span>
+                                        <span class="invosymbol"><%=rd.platform_fee%></span>
+                                    </div>
+                                    <hr class="mt-2 mb-2">
+        
+                                    <div class="d-flex justify-content-between flex-wrap">
+                                        <% if ( rd.status != "8" ) { %>
+                                            <span><%=lan.Driver%> <%=lan.Received%> :- </span>
+                                            <span class="invosymbol">0</span>
+                                        <% } else { %>
+                                            <div>
+                                                <span><%=lan.Driver%> <%=lan.Received%> :- </span>
+                                                <div class="d-flex justify-content-between flex-wrap">
+
+                                                    <p class="mb-0"><%=lan.Ride%> <%=lan.Price%> :- <span class="invosymbol"><%=rd.fprice%></span></p> &nbsp; + &nbsp;
+                                                    <p class="mb-0"><%=lan.Additional%> <%=lan.Time%> <%=lan.Price%> :- <span class="invosymbol"><%=rd.addi_time_price%></span></p> &nbsp; + &nbsp;
+                                                    <p class="mb-0"><%=lan.Weather%> <%=lan.Price%> :- <span class="invosymbol"><%=rd.weather_price%></span></p>
+
+                                                    <!-- <% if (rd.fprice != "0") { %>
+                                                        <p class="mb-0"><%=lan.Ride%> <%=lan.Price%> :- <span class="invosymbol"><%=rd.fprice%></span></p>
+                                                    <% }; %>
+                                                    <% if (rd.fprice != "0" && rd.addi_time_price != "0") { %>
+                                                        &nbsp; + &nbsp;
+                                                    <% }; %>
+                                                    <% if (rd.addi_time_price != "0") { %>
+                                                        <p class="mb-0"><%=lan.Additional%> <%=lan.Time%> <%=lan.Price%> :- <span class="invosymbol"><%=rd.addi_time_price%></span></p> &nbsp; + &nbsp;
+                                                    <% }; %>
+                                                    <% if (rd.weather_price != "0") { %>
+                                                        <p class="mb-0"><%=lan.Weather%> <%=lan.Price%> :- <span class="invosymbol"><%=rd.weather_price%></span></p>
+                                                    <% }; %> -->
+                                                </div>
+                                            </div>
+                                            <span class="invosymbol"><%=rd.driver_fee%></span>
+                                        <% }; %>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="col-sm-12 col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            
+                            <div class="d-flex justify-content-center">
+                                <div style="padding: 15px 26px; border: 2px solid #5c61f2;">
+                                    <span class="f-16 f-w-600 mb-1 mt-2"><%=rd.pic_address.title%></span>
+                                    <p class="m-0 f-15"><%=rd.pic_address.subtitle%></p>
+                                </div>
+                            </div>
+                            <section class="cd-container" id="cd-timeline">
+                                <% let check = 0; %>
+                                <% rd.drop_address.forEach((data, i) => { %>
+                                    <% if (check == "0") { %>
+                                        <div class="cd-timeline-block">
+                                            <div class="cd-timeline-img cd-picture bg-primary"><i class="icon-location-pin f-22"></i></div>
+                                            <div class="cd-timeline-content p-4 <%= data.status %> border-2">
+                                                <span class="f-16 f-w-600 mb-0"><%=i+1%>. <%=data.title%></span>
+                                                <p class="m-0 f-w-400"><%=data.subtitle%></p>
+                                            </div>
+                                        </div>
+                                        <% check = 1; %>
+                                    <% } else { %>
+                                        <div class="cd-timeline-block">
+                                            <div class="cd-timeline-img cd-movie bg-primary"><i class="icon-location-pin f-22"></i></div>
+                                            <div class="cd-timeline-content p-4 <%= data.status %> border-2">
+                                                <span class="f-16 f-w-600 mb-0"><%=i+1%>. <%=data.title%></span>
+                                                <p class="m-0 f-w-400"><%=data.subtitle%></p>
+                                            </div>
+                                        </div>
+                                        <% check = 0; %>
+                                    <% }; %>
+                                <% }) %>
+                            </section>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            
+                            <div class="d-flex justify-content-center">
+                                <div style="padding: 15px 26px; border: 2px solid #5c61f2;">
+                                    <span class="timelinespan f-12 f-w-500 mb-1 mt-2"><%=rd.first_stime[0].time%></span>
+                                    <p class="m-0 f-16"><%=rd.first_stime[0].title%></p>
+                                </div>
+                            </div>
+                            <section class="cd-container" id="cd-timeline">
+                                <% let tcheck = 0; %>
+                                <% rd.second_stime.forEach((data, i) => { %>
+                                    <% if (tcheck == "0") { %>
+                                        <div class="cd-timeline-block">
+                                            <div class="cd-timeline-img cd-picture bg-primary"><i class="icon-location-pin f-22"></i></div>
+                                            <div class="cd-timeline-content p-3 <%= data.status %> border-2">
+                                                <span class="timelinespan f-12 f-w-500 mb-1 mt-2"><%=data.time%></span>
+                                                <p class="m-0 f-16"><%=data.title%></p>
+                                                <% if (data.addtit != "") { %>
+                                                    <p><%=data.addtit%></p>
+                                                <% }; %>
+                                                <% if (data.addubtit != "") { %>
+                                                    <p class="f-w-400 pt-0 mb-0"><%=data.addubtit%></p>
+                                                <% }; %>
+                                            </div>
+                                        </div>
+                                        <% tcheck = 1; %>
+                                    <% } else { %>
+                                        <div class="cd-timeline-block">
+                                            <div class="cd-timeline-img cd-movie bg-primary"><i class="icon-location-pin f-22"></i></div>
+                                            <div class="cd-timeline-content p-3 <%= data.status %> border-2">
+                                                <span class="timelinespan f-12 f-w-500 mb-1 mt-2"><%=data.time%></span>
+                                                <p class="m-0 f-16"><%=data.title%></p>
+                                                <% if (data.addtit != "") { %>
+                                                    <p><%=data.addtit%></p>
+                                                <% }; %>
+                                                <% if (data.addubtit != "") { %>
+                                                    <p class="f-w-400 pt-0 mb-0"><%=data.addubtit%></p>
+                                                <% }; %>
+                                            </div>
+                                        </div>
+                                        <% tcheck = 0; %>
+                                    <% }; %>
+                                <% }) %>
+                            </section>
+
+                            <!-- <div class="page pt-0" data-uia-timeline-skin="3" data-uia-timeline-adapter-skin-3="uia-card-skin-#1">
+                                        <div class="uia-timeline">
+                                            <div class="uia-timeline__container">
+                                                <div class="uia-timeline__line"></div>
+
+                                                <div class="uia-timeline__annual-sections">
+                                                    <span class="uia-timeline__year" aria-hidden="true">2008</span>
+                                                    <div class="uia-timeline__groups">
+
+                                                        <section class="uia-timeline__group" aria-labelledby="timeline-demo-1-heading-1">
+                                                            <div class="uia-timeline__point uia-card" data-uia-card-skin="1" data-uia-card-mod="1">
+                                                                <div class="uia-card__container">
+                                                                    <div class="uia-card__intro">
+                                                                        <h3 id="timeline-demo-1-heading-1" class="ra-heading ha-screen-reader">Philadelphia Museum School of Industrial Art</h3>
+                                                                        <span class="uia-card__time">
+                                                                            <time datetime="2008-02-02">
+                                                                                <span class="uia-card__day">2</span>
+                                                                                <span>February 2008</span>
+                                                                            </time>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="uia-card__body">
+                                                                        <div class="uia-card__description">
+                                                                            <p>Attends the Philadelphia Museum School of Industrial Art. Studies design with Alexey Brodovitch, art director at Harper's Bazaar, and works as his assistant.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="uia-timeline__annual-sections">
+                                                    <span class="uia-timeline__year" aria-hidden="true">2014</span>
+                                                    <div class="uia-timeline__groups">
+                                                        <section class="uia-timeline__group" aria-labelledby="timeline-demo-1-heading-3">
+                                                            <div class="uia-timeline__point uia-card" data-uia-card-skin="1" data-uia-card-mod="1">
+                                                                <div class="uia-card__container">
+                                                                    <div class="uia-card__intro">
+                                                                        <h3 id="timeline-demo-1-heading-3" class="ra-heading ha-screen-reader">My travel to Europe</h3>
+                                                                        <span class="uia-card__time">
+                                                                            <time datetime="2014-07-14">
+                                                                                <span class="uia-card__day">14</span>
+                                                                                <span>Jul<span class="ha-screen-reader">e 2014</span></span>
+                                                                            </time>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="uia-card__body">
+                                                                        <div class="uia-card__description">
+                                                                            <p>Travels to France, Italy, Spain, and Peru. After completing fashion editorial in Lima, prolongs stay to make portraits of local people in a daylight studio.</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+    <%- include('./partials/footer'); -%>
+    <%- include('./partials/script'); -%>
+  </body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                    <h3><%=driver[0].first_name%> <%=driver[0].last_name%> <span class="f-18 f-w-500"><%=lan.Add%> <%=lan.Document%></span></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Driver%></li>
+                    <li class="breadcrumb-item active"><%=lan.Add%> <%=lan.Document%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <form  class="needs-validation" id="doc_form" novalidate="" action="/driver/add_documentdata/<%=driver[0].id%>" method="post" enctype="multipart/form-data">
+            <div class="row">
+
+            <% documant_list.forEach((data) => { %>
+            <div class="col-sm-6">
+                <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <h5><%= data.name%></h5>
+
+                            <div class="col-12 mt-4">
+                                <div class="row">
+
+                                    <% if(data.require_image_side == "1" || data.require_image_side == "3") { %>
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6" id="firstmain_image">
+                                            <div class="col-12 form-group">
+                                                <div class="text-center form-group">
+                                                    <img id="firstfile-preview" width="150" height="150" src="../../images/dashboard/default/profile.png" alt="image">
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="col-12 form-group">
+                                                <label class="col-form-label"><%=lan.Front%> <%=lan.image%></label>
+                                                <input class="form-control doccheck" id="firstimg" style="height: 47px;" type="file" name="docimage" onchange="ddimage1(event)" required>
+                                            </div>
+                                        </div>
+                                    <% }; %>
+
+                                    <% if(data.require_image_side == "2" || data.require_image_side == "3") { %>
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6" id="secoundmain_image">
+                                            <div class="col-12 form-group">
+                                                <div class="text-center form-group">
+                                                    <img id="secondfile-preview" width="150" height="150" src="../../images/dashboard/default/profile.png" alt="image">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 form-group">
+                                                <label class="col-form-label"><%=lan.Back%> <%=lan.image%></label>
+                                                <input class="form-control doccheck" id="secimage" style="height: 47px;" type="file" name="docimage" onchange="ddimage2(event)" required>
+                                            </div>
+                                        </div>
+                                    <% }; %>
+
+                                </div>
+                            </div>
+
+                            <% if (data.input_require == "1"){ %>
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                                  <label class="col-form-label"><%= data.req_field_name%></label>
+                                  <input class="form-control doccheck" type="text" name="fname" placeholder="<%=lan.Enter%> <%= data.req_field_name%>" required>
+                                </div>
+
+                            <% } %>
+
+                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6" id="appdcheckbox" style="margin-top: 40px;">
+                                <div class="d-flex mb-2">
+                                    <label class="col-form-label m-r-10"> <%=lan.Unapproved%></label>
+                                    <div class="icon-state switch-outline">
+                                        <label class="switch">
+                                            <input type="checkbox" id="acbox"><span class="switch-state bg-success"></span>
+                                        </label>
+                                    </div>
+                                    <input type="hidden" name="status" id="adddcheck" value="0">
+                                    <label class="col-form-label m-l-10"><%=lan.Status%></label>
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="docid" value="<%=data.id%>">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% }) %>
+            </div>
+            </form>
+
+            <div class="text-center">
+                <p class="text-danger d-none mt-3" id="deriver_detail_error"><%=lan.Please_Enter_All_Detail%>.</p>
+            </div>
+            <div class="text-end mt-3">
+                <button class="btn btn-square btn-primary btn-air-primary b-r-10" id="add_ddocument_btn" type="submit"><%=lan.Submit%></button> 
+            </div>
+
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <%- include('./partials/footer'); -%>
+        <%- include('./partials/script'); -%>
+  </body>
+</html>

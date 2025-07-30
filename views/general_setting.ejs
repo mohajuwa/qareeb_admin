@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=lan.General%> <%=lan.Setting%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.General%> <%=lan.Setting%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-body">
+                    <form  class="needs-validation" novalidate="" action="/settings/add_setting" method="post" enctype="multipart/form-data">
+                      <div class="row">
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="text-center form-group">
+                              <% if(general.dark_image == "null") { %>
+                                <img id="file-preview" width="150" height="150" src="../images/dashboard/default/profile.png" alt="image">
+                              <% } else { %>
+                                <a href="../../<%=general.dark_image%>" target="_blank"><img id="file-preview" width="150" src="../../<%=general.dark_image%>" alt="image"></a>
+                              <% } %>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-form-label"><%=lan.Dark%> <%=lan.image%></label>
+                              <input class="form-control" style="height: 47px;" type="file" accept="image/*" name="dark_image" >
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="text-center form-group">
+                                <% if(general.light_image == "null") { %>
+                                  <img id="file-preview" width="150" height="150" src="../images/dashboard/default/profile.png" alt="image">
+                                <% } else { %>
+                                  <a href="../../<%=general.light_image%>" target="_blank"><img id="file-preview" width="150" src="../../<%=general.light_image%>" style="background-color: black;" alt="image"></a>
+                                <% } %>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label"><%=lan.Light%> <%=lan.image%></label>
+                                <input class="form-control" style="height: 47px;" type="file" accept="image/*" name="light_image" >
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Site%> <%=lan.Title%></label>
+                          <input class="form-control" type="text" name="title" value="<%=general.title%>" placeholder="<%=lan.Enter%> <%=lan.Title%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Alert%> <%=lan.Tone%></label>
+                          <div class="row">
+                            <div class="col-5">
+                              <audio controls>
+                                <source src="../../<%=general.alert_tone%>" type="audio/mpeg">
+                              </audio>
+                            </div>
+                            <div class="col-7" style="margin-top: 4px;">
+                              <input class="form-control" type="file" accept="audio/*" name="alert_tone" style="height: 47px;">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Currency%></label>
+                          <input class="form-control" type="text" name="site_currency" value="<%=general.site_currency%>" placeholder="<%=lan.Enter%> <%=lan.Currency%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                            <label for="Thousands_Separator" class="form-label"><%=lan.Thousands_Separator%></label>
+                            <select class="form-control wide" name="thousands_separator" required> 
+                              <option value="1" <%= general.thousands_separator == 1 ? 'selected' : '' %> >, (<%=lan.Comma%>)</option>
+                              <option value="2" <%= general.thousands_separator == 2 ? 'selected' : '' %> >. (<%=lan.Full%> <%=lan.Stop%>)</option>
+                              <option value="3" <%= general.thousands_separator == 3 ? 'selected' : '' %> >` (<%=lan.Apostrophe%>)</option>
+                              <option value="4" <%= general.thousands_separator == 4 ? 'selected' : '' %> ><%=lan.None%></option>
+                              <option value="5" <%= general.thousands_separator == 5 ? 'selected' : '' %> ><%=lan.Space%></option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Google%> <%=lan.Map%> <%=lan.Key%></label>
+                          <input class="form-control" type="text" name="google_map_key" value="<%=general.google_map_key%>" placeholder="<%=lan.Enter%> <%=lan.Google%> <%=lan.Map%> <%=lan.Key%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Ride%> <%=lan.Acceptance%> <%=lan.Radius%></label>
+                          <input class="form-control" type="number" name="ride_radius" value="<%=general.ride_radius%>" placeholder="<%=lan.Enter%> <%=lan.Ride%> <%=lan.Acceptance%> <%=lan.Radius%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Show%> <%=lan.Nearby%> <%=lan.Vehicle%> <%=lan.Radius%></label>
+                          <input class="form-control" type="number" name="vehicle_radius" value="<%=general.vehicle_radius%>" placeholder="<%=lan.Enter%> <%=lan.Show%> <%=lan.Nearby%> <%=lan.Vehicle%> <%=lan.Radius%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Driver%> <%=lan.Offer%> <%=lan.Increment%> <%=lan.Counter%></label>
+                          <input class="form-control" type="number" name="dri_offer_increment" value="<%=general.dri_offer_increment%>" placeholder="<%=lan.Enter%> <%=lan.Driver%> <%=lan.Offer%> <%=lan.Increment%> <%=lan.Counter%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Offer%> <%=lan.Time_in_second%></label>
+                          <input class="form-control" type="number" name="offer_time" value="<%=general.offer_time%>" placeholder="<%=lan.Enter%> <%=lan.Offer%> <%=lan.Time_in_second%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Complete%> <%=lan.Offer%> <%=lan.Expired%> <%=lan.Radius%> <%=lan.Time_in_second%></label>
+                          <input class="form-control" type="number" name="offer_expire_time" value="<%=general.offer_expire_time%>" placeholder="<%=lan.Enter%> <%=lan.Complete%> <%=lan.Offer%> <%=lan.Expired%> <%=lan.Radius%> <%=lan.Time_in_second%>" required>
+                        </div>
+
+                        <hr class="mt-4">
+                        <h5 class="pb-2"><%=lan.Driver%> <%=lan.Detail%>: <span class="f-w-500"><%=lan.Service%> (<%=lan.Module%>) <%=lan.Enable%>/<%=lan.Disable%></span></h5>
+
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" style="margin-top: 30px;">
+                          <div class="row">
+                              <!--
+                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                              <div class="d-flex mb-2">
+                                  <div class="icon-state switch-outline">
+                                      <label class="switch">
+                                          <input type="checkbox" name="outstation" <%= general.outstation == '1' ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                                      </label>
+                                  </div>
+                                  <label class="col-form-label m-l-10"><%=lan.Outstation%></label>
+                              </div>
+                            </div>                      
+  
+                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                <div class="d-flex mb-2">
+                                    <div class="icon-state switch-outline">
+                                        <label class="switch">
+                                            <input type="checkbox" name="rental" <%= general.rental == '1' ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                                        </label>
+                                    </div>
+                                    <label class="col-form-label m-l-10"><%=lan.Rental%></label>
+                                </div>
+                            </div>                      
+  
+                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                <div class="d-flex mb-2">
+                                    <div class="icon-state switch-outline">
+                                        <label class="switch">
+                                            <input type="checkbox" name="package" <%= general.package == '1' ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                                        </label>
+                                    </div>
+                                    <label class="col-form-label m-l-10"><%=lan.Package%></label>
+                                </div>
+                            </div>  
+                            !-->
+                          </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <div class="row">
+                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4" style="margin-top: 30px;">
+                              <div class="d-flex mb-2">
+                                <div class="icon-state switch-outline">
+                                    <label class="switch">
+                                        <input type="checkbox" name="def_driver" <%= general.def_driver == '1' ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                                    </label>
+                                </div>
+                                <label class="col-form-label m-l-10"><%=lan.Driver%> <%=lan.Approve%></label>
+                            </div>
+                            </div>
+                            <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                              <label class="col-form-label"><%=lan.Select%> <%=lan.Default%> <%=lan.Payment%></label>
+                              <select class="js-example-basic-single dricheck" name="dpayment" required>
+                                <option value selected disabled><%=lan.Select%> <%=lan.Default%> <%=lan.Payment%></option>
+                                <% payment_list.forEach((data) => { %>
+                                    <option value="<%= data.id %>" <%= general.default_payment == data.id ? 'selected' : '' %>><%= data.name %></option>
+                                <% }) %>
+                              </select>
+                            </div>
+                          </div>
+                        </div>   
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.No_of_min%>. <%=lan.for_Free_Wait%></label>
+                          <input class="form-control" type="number" name="driver_wait_time" value="<%=general.driver_wait_time%>" placeholder="<%=lan.Enter%> <%=lan.No_of_min%>. <%=lan.for_Free_Wait%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Free_wait_time_after_Pet_Minute_price%></label>
+                          <input class="form-control" type="number" name="driver_wait_price" value="<%=general.driver_wait_price%>" placeholder="<%=lan.Enter%> <%=lan.Free_wait_time_after_Pet_Minute_price%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <div class="d-flex">
+                            <label class="col-form-label"><%=lan.Wallet_Min_Balance_For_Withdraw%> (<label class="invosymbol"></label>)</label>
+                          </div>
+                          <input class="form-control" type="text" name="s_min_withdraw" value="<%=general.s_min_withdraw%>" placeholder="<%=lan.Enter%> <%=lan.Wallet_Min_Balance_For_Withdraw%>" required>
+                        </div>
+
+                        <hr class="mt-4">
+                        <h5 class="pb-2"><%=lan.Customer%> <%=lan.SignUp%></h5>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Signup%> <%=lan.Credit%></label>
+                          <input class="form-control" type="text" name="signup_credit" value="<%=general.signup_credit%>" placeholder="<%=lan.Enter%> <%=lan.Signup%> <%=lan.Credit%>" required>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Refer%> <%=lan.Credit%></label>
+                          <input class="form-control" type="text" name="refer_credit" value="<%=general.refer_credit%>" placeholder="<%=lan.Enter%> <%=lan.Refer%> <%=lan.Credit%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <div class="row">
+                            <label class="col-form-label"><%=lan.Commission%> <%=lan.Rate%></label>
+                            <div class="col-sm-6 col-md-8 col-lg-8 col-xl-8">
+                              <input class="form-control" type="text" name="commission_rate" value="<%=general.commission_rate%>" placeholder="<%=lan.Enter%> <%=lan.Commission%> <%=lan.Rate%>" required>
+                            </div>
+                            <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 d-flex">
+                              <div class="col-4">
+                                <input class="form-control" type="text" placeholder="<%=lan.FIX%>" readonly>
+                              </div>
+                              <div class="col-4 text-center">
+                                <div class="icon-state switch-outline" style="padding-top: 6px;">
+                                  <label class="switch">
+                                    <input type="checkbox" name="commisiion_type" <%= general.commisiion_type == '%' ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-4">
+                                <input class="form-control" type="text" placeholder="%" readonly>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <div class="row">
+                            <label class="col-form-label"><%=lan.Weather%> <%=lan.change%></label>
+                            <div class="col-sm-6 col-md-8 col-lg-8 col-xl-8">
+                              <input class="form-control" type="text" name="weather_price" value="<%=general.weather_price%>" placeholder="<%=lan.Enter%> <%=lan.Weather%> <%=lan.change%>" required>
+                            </div>
+                            <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 d-flex">
+                              <div class="col-4">
+                                <input class="form-control" type="text" placeholder="<%=lan.FIX%>" readonly>
+                              </div>
+                              <div class="col-4 text-center">
+                                <div class="icon-state switch-outline" style="padding-top: 6px;">
+                                  <label class="switch">
+                                    <input type="checkbox" name="weather_type" <%= general.weather_type == '%' ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                                  </label>
+                                </div>
+                              </div>
+                              <div class="col-4">
+                                <input class="form-control" type="text" placeholder="%" readonly>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <hr class="mt-4">
+                        <h5 class="pb-2"><%=lan.One%> <%=lan.Signal%> <%=lan.Detail%></h5>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.App%> <%=lan.Id%></label>
+                          <input class="form-control" type="text" name="one_app_id" value="<%=general.one_app_id%>" placeholder="<%=lan.Enter%> <%=lan.App%> <%=lan.Id%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Api%> <%=lan.Key%></label>
+                          <input class="form-control" type="text" name="one_api_key" value="<%=general.one_api_key%>" placeholder="<%=lan.Enter%> <%=lan.Api%> <%=lan.Key%>" required>
+                        </div>
+
+                        <hr class="mt-4">
+                        <h5 class="pb-2"><%=lan.Select%> <%=lan.SMS%> <%=lan.Type%></h5>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label for="Thousands_Separator" class="form-label"><%=lan.SMS%> <%=lan.Type%></label>
+                          <select class="form-control wide" name="smstype" required> 
+                            <option value selected disabled><%=lan.Select%> <%=lan.SMS%> <%=lan.Type%></option>
+                            <option value="1" <%= general.sms_type == 1 ? 'selected' : '' %> ><%=lan.MSG91%></option>
+                            <option value="2" <%= general.sms_type == 2 ? 'selected' : '' %> ><%=lan.Twilio%></option>
+                            <option value="4" <%= general.sms_type == 4 ? 'selected' : '' %> ><%=lan.No_Auth%></option>
+                            <!-- <option value="3" <%= general.sms_type == 3 ? 'selected' : '' %> ><%=lan.Firebase%></option> -->
+                          </select>
+                        </div>
+
+                        <hr class="mt-4">
+                        <h5 class="pb-2"><%=lan.MSG91%> <%=lan.SMS%> <%=lan.Verification%></h5>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.MSG91%> <%=lan.Auth%> <%=lan.Key%></label>
+                          <input class="form-control" type="text" name="msgkey" value="<%=general.msg_key%>" placeholder="<%=lan.Enter%> <%=lan.Auth%> <%=lan.Key%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.MSG91%> <%=lan.OTP%> <%=lan.Template%> <%=lan.Id%></label>
+                          <input class="form-control" type="text" name="msgid" value="<%=general.msg_token%>" placeholder="<%=lan.Enter%> <%=lan.OTP%> <%=lan.Template%> <%=lan.Id%>" required>
+                        </div>
+
+                        <hr class="mt-4">
+                        <h5 class="pb-2"><%=lan.Twilio%> <%=lan.SMS%> <%=lan.Verification%></h5>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Twilio%> <%=lan.Account%> <%=lan.SID%></label>
+                          <input class="form-control" type="text" name="twisid" value="<%=general.twilio_sid%>" placeholder="<%=lan.Enter%> <%=lan.Account%> <%=lan.SID%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Twilio%> <%=lan.Auth%> <%=lan.Token%></label>
+                          <input class="form-control" type="text" name="twitoken" value="<%=general.twilio_token%>" placeholder="<%=lan.Enter%> <%=lan.Auth%> <%=lan.Token%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Twilio%> <%=lan.Phone%> <%=lan.Number%></label>
+                          <input class="form-control" type="text" name="twipnumber" value="<%=general.twilio_phoneno%>" placeholder="<%=lan.Enter%> <%=lan.Phone%> <%=lan.Number%>" required>
+                        </div>
+
+                      </div>
+                      <% let permissions = per != "1" ? per.setting[1] : "1" %>
+                      <% if(permissions == "1"){ %>
+                      <div class="text-end mt-5">
+                        <button class="btn btn-square btn-primary btn-air-primary add_detail_btn b-r-10" type="submit"><%=lan.Submit%></button> 
+                      </div>
+                      <% } %>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <%- include('./partials/footer'); -%>
+        <%- include('./partials/script'); -%>
+  </body>
+</html>

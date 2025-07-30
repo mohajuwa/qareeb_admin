@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3> <%=lan.Edit%> <%=lan.Driver%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Driver%></li>
+                    <li class="breadcrumb-item active"><%=lan.Edit%> <%=lan.Driver%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-12">
+
+                <div class="card">
+                  <div class="card-body">
+                    <form  class="needs-validation" id="edit_driver_form" novalidate="" action="/driver/edit_driver/<%=driver.id%>" method="post" enctype="multipart/form-data">
+                      <div class="row">
+                        <h5><%=lan.Personal%> <%=lan.Information%></h5>
+
+                        <div class="col-12">
+                            <div class="text-center form-group">
+                                <% if(driver.profile_image == null) { %>
+                                    <img id="file-preview" width="150" height="150" src="../images/dashboard/default/profile.png" alt="image">
+                                <% } else { %>
+                                  <a href="../../<%=driver.profile_image%>" target="_blank"><img id="file-preview" width="150" height="150" src="../../<%=driver.profile_image%>" alt="image"></a>
+                                <% }; %>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                            <label class="col-form-label"><%=lan.Profile%> <%=lan.image%></label>
+                            <input class="form-control" style="height: 47px;" type="file" name="profile_image" onchange="showPreview(event)">
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                          <label class="col-form-label"><%=lan.First%> <%=lan.Name%></label>
+                          <input class="form-control dricheck" type="text" name="first_name" value="<%=driver.first_name%>" placeholder="<%=lan.Enter%> <%=lan.First%> <%=lan.Name%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                          <label class="col-form-label"><%=lan.Last%> <%=lan.Name%></label>
+                          <input class="form-control dricheck" type="text" name="last_name" value="<%=driver.last_name%>" placeholder="<%=lan.Enter%> <%=lan.Last%> <%=lan.Name%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Primary%> <%=lan.Mobile%> <%=lan.Number%></label>
+                          <div class="row">
+                            <div class="col-4">
+                              <select class="js-example-basic-single dricheck" id="primary_ccode" name="primary_ccode">
+                                <option value selected disabled><%=lan.Country%> <%=lan.Code%> <%=lan.List%></option>
+                                <% CountryCode.forEach((data, x) => { %>
+                                  <option value="<%= data %>" <%= driver.primary_ccode == data ? 'selected' : "" %>> <%= nameCode[x] %> <%= data %> </option>
+                                <% }) %>
+                              </select>
+                            </div>
+                            <div class="col-8">
+                              <input class="form-control dricheck" type="number" value="<%=driver.primary_phoneNo%>" id="primary_phoneNo" name="primary_phoneNo" placeholder="<%=lan.Enter%> <%=lan.Primary%> <%=lan.Number%>">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                            <label class="col-form-label"><%=lan.Secoundary%> <%=lan.Mobile%> <%=lan.Number%></label>
+                            <div class="row">
+                                <div class="col-4">
+                                    <select class="js-example-basic-single dricheck" id="secound_ccode" name="secound_ccode">
+                                        <option value selected disabled><%=lan.Country%> <%=lan.Code%> <%=lan.List%></option>
+                                        <% CountryCode.forEach((data, x) => { %>
+                                            <option value="<%= data %>" <%= driver.secound_ccode == data ? 'selected' : "" %>> <%= nameCode[x] %> <%= data %> </option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="col-8">
+                                    <input class="form-control  dricheck" type="number" value="<%=driver.secound_phoneNo%>" id="secound_phoneNo" name="secound_phoneNo" placeholder="<%=lan.Enter%> <%=lan.Secoundary%> <%=lan.Number%>" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="pccode" value="<%=driver.primary_ccode%>">
+                        <input type="hidden" id="pphone" value="<%=driver.primary_phoneNo%>">
+                        <input type="hidden" id="sccode" value="<%=driver.secound_ccode%>">
+                        <input type="hidden" id="sphone" value="<%=driver.secound_phoneNo%>">
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                            <label class="col-form-label"><%=lan.Email%></label>
+                            <input class="form-control dricheck" type="email" name="email" value="<%=driver.email%>" placeholder="<%=lan.Enter%> <%=lan.Email%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Password%></label>
+                          <input class="form-control" type="password" name="password" placeholder="**********">
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                            <label class="col-form-label"><%=lan.Nationality%></label>
+                            <input class="form-control dricheck" type="text" name="nationality" value="<%=driver.nationality%>" placeholder="<%=lan.Enter%> <%=lan.Nationality%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                            <label class="col-form-label"><%=lan.Date_of_birth%></label>
+                            <input class="form-control dricheck" type="date" name="date_of_birth" value="<%=driver.date_of_birth%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                            <label class="col-form-label"><%=lan.Complete%> <%=lan.Address%></label>
+                            <input class="form-control dricheck" type="text" name="com_address" value="<%=driver.com_address%>" placeholder="<%=lan.Enter%> <%=lan.Complete%> <%=lan.Address%>" required>
+                        </div>
+                        
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                            <label class="col-form-label"><%=lan.Zone%></label>
+                            <select class="js-example-placeholder-multiple col-sm-12 dricheck" name="zone" multiple="multiple">
+                                <% zone_data.forEach((data) => { %>
+                                  <% let zonecheck = (data.id).toString() %>
+                                  <% if (zone.includes(zonecheck) == true) { %>
+                                      <option value="<%= data.id %>" selected><%= data.name %></option>
+                                  <% } else { %>
+                                      <option value="<%= data.id %>"><%= data.name %></option>
+                                  <% }; %>
+                                <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                            <label class="col-form-label"><%=lan.Languages_you_know%></label>
+                            <select class="custome_select_create form-control shitter_input dricheck" multiple="multiple" name="language" required>
+                              <% language.forEach((data) => { %>
+                                <option value="<%= data %>" selected><%= data %></option>
+                              <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <div class="d-flex" style="margin-top: 30px;">
+                              <div class="icon-state switch-outline">
+                                  <label class="switch">
+                                      <input type="checkbox" name="status" <%= driver.status == '1' ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                                  </label>
+                              </div>
+                              <label class="col-form-label m-l-10"><%=lan.Status%></label>
+                          </div>
+                      </div> 
+                        
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="card-body">
+                      <div class="row">
+                        <h5><%=lan.Vehicle%> <%=lan.Details%></h5>
+
+                        <div class="col-12">
+                            <div class="text-center form-group">
+                                <% if(driver.vehicle_image == null) { %>
+                                    <img id="second-file-preview" width="150" height="150" src="../images/dashboard/default/profile.png" alt="image">
+                                <% } else { %>
+                                  <a href="../../<%=driver.vehicle_image%>" target="_blank"><img id="second-file-preview" width="150" height="150" src="../../<%=driver.vehicle_image%>" alt="image"></a>
+                                <% }; %>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                          <label class="col-form-label"><%=lan.Select%> <%=lan.Vehicle%></label>
+                            <select class="js-example-basic-single dricheck" id="pri_ccode" name="vehicle" required>
+                                <option value selected disabled><%=lan.Select%> <%=lan.Vehicle%></option>
+                                <% vehicle_list.forEach((data) => { %>
+                                    <option value="<%= data.id %>" <%= driver.vehicle == data.id ? 'selected' : "" %>> <%= data.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                            <label class="col-form-label"><%=lan.Upload%> <%=lan.Vehicle%> <%=lan.image%></label>
+                            <input class="form-control" style="height: 47px;" type="file" name="vehicle_image" onchange="secondshowPreview(event)">
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                          <label class="col-form-label"><%=lan.Vehicle%> <%=lan.Registration%> <%=lan.Number%></label>
+                          <input class="form-control dricheck" type="text" name="vehicle_number" value="<%=driver.vehicle_number%>" placeholder="<%=lan.Enter%> <%=lan.Registration%> <%=lan.Number%>" required>
+                        </div>                        
+
+                        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                          <label class="col-form-label"><%=lan.Car%> <%=lan.Color%></label>
+                          <input class="form-control dricheck" type="text" name="car_color" value="<%=driver.car_color%>" placeholder="<%=lan.Enter%> <%=lan.Your%> <%=lan.Car%> <%=lan.Color%>" required>
+                        </div>                        
+
+                        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                          <label class="col-form-label"><%=lan.Passenger%> <%=lan.Capacity%></label>
+                          <input class="form-control dricheck" type="number" name="passenger_capacity" value="<%=driver.passenger_capacity%>" placeholder="<%=lan.Enter%> <%=lan.Passenger%> <%=lan.Capacity%>" required>
+                        </div>                        
+
+                        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                            <label class="col-form-label"><%=lan.Vehicle%> <%=lan.Preference%></label>
+                            <select class="js-example-placeholder-multiple col-sm-12 dricheck" name="vehicle_prefrence" multiple="multiple">
+                                <% preference_list.forEach((data) => { %>
+                                  <% let prefecheck = (data.id).toString() %>
+                                  <% if (vehicle_prefrence.includes(prefecheck) == true) { %>
+                                      <option value="<%= data.id %>" selected><%= data.name %></option>
+                                  <% } else { %>
+                                      <option value="<%= data.id %>"><%= data.name %></option>
+                                  <% }; %>
+                                <% }) %>
+                            </select>
+                        </div>                        
+
+                  </div>
+                </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                      <div class="row">
+                        <h5 class="mb-4"><%=lan.Bank%> <%=lan.Account%> <%=lan.Details%></h5>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.IBAN%> <%=lan.Number%></label>
+                          <input class="form-control dricheck" type="text" name="iban_number" value="<%=driver.iban_number%>" placeholder="<%=lan.Enter%> <%=lan.Your%> <%=lan.IBAN%> <%=lan.Number%>" required>
+                        </div>                        
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Bank%> <%=lan.Name%></label>
+                          <input class="form-control dricheck" type="text" name="bank_name" value="<%=driver.bank_name%>" placeholder="<%=lan.Enter%> <%=lan.Your%> <%=lan.Bank%> <%=lan.Name%>" required>
+                        </div>                        
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Account%> <%=lan.Holder%> <%=lan.Name%></label>
+                          <input class="form-control dricheck" type="text" name="account_hol_name" value="<%=driver.account_hol_name%>" placeholder="<%=lan.Enter%> <%=lan.Your%> <%=lan.Account%> <%=lan.Holder%> <%=lan.Name%>" required>
+                        </div>                        
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.VAT_ID%></label>
+                          <input class="form-control dricheck" type="text" name="vat_id" value="<%=driver.vat_id%>" placeholder="<%=lan.Enter%> <%=lan.Your%> <%=lan.VAT_ID%>" required>
+                        </div>                        
+
+                    </div>
+                    <div class="text-center">
+                      <p class="text-danger d-none mt-3" id="deriver_detail_error"><%=lan.Please_Enter_All_Detail%>.</p>
+                      <p class="text-danger d-none mt-3" id="deriver_phoneno_error"><%=lan.This_Phone_No_Alread_Registered%>.</p>
+                      <p class="text-danger d-none mt-3" id="deriver_diffphoneno_error"><%=lan.Please_enter_different_number%>.</p>
+                  </div>
+                  </form>
+                  <div class="text-end mt-4">
+                    <button class="btn btn-square btn-primary btn-air-primary b-r-10" id="edit_driver_btn" type="submit"><%=lan.Submit%></button> 
+                  </div>
+                  </div>
+                </div>
+
+                <!-- <div class="card">
+                  <div class="card-body">
+                      <div class="row">
+                        <h5 class="mb-4"><%=lan.Service%></h5>
+
+                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                            <div class="d-flex mb-2">
+                                <div class="icon-state switch-outline">
+                                    <label class="switch">
+                                        <input type="checkbox" name="outstation" required <%= driver.outstation == '1' ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                                    </label>
+                                </div>
+                                <label class="col-form-label m-l-10"><%=lan.Outstation%></label>
+                            </div>
+                        </div>                      
+
+                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                            <div class="d-flex mb-2">
+                                <div class="icon-state switch-outline">
+                                    <label class="switch">
+                                        <input type="checkbox" name="rental" required <%= driver.rental == '1' ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                                    </label>
+                                </div>
+                                <label class="col-form-label m-l-10"><%=lan.Rental%></label>
+                            </div>
+                        </div>                      
+
+                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                            <div class="d-flex mb-2">
+                                <div class="icon-state switch-outline">
+                                    <label class="switch">
+                                        <input type="checkbox" name="package" required <%= driver.package == '1' ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                                    </label>
+                                </div>
+                                <label class="col-form-label m-l-10"><%=lan.Package%></label>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                            <div class="d-flex mb-2">
+                                <div class="icon-state switch-outline">
+                                    <label class="switch">
+                                        <input type="checkbox" name="status" required <%= driver.status == '1' ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                                    </label>
+                                </div>
+                                <label class="col-form-label m-l-10"><%=lan.Status%></label>
+                            </div>
+                        </div>
+
+                        </div>
+                        <div class="text-center">
+                            <p class="text-danger d-none mt-3" id="deriver_detail_error"><%=lan.Please_Enter_All_Detail%>.</p>
+                            <p class="text-danger d-none mt-3" id="deriver_phoneno_error"><%=lan.This_Phone_No_Alread_Registered%>.</p>
+                        </div>
+                    </form>
+                    <div class="text-end mt-4">
+                      <button class="btn btn-square btn-primary btn-air-primary b-r-10" id="edit_driver_btn" type="submit"><%=lan.Submit%></button> 
+                    </div>
+                  </div>
+                </div> -->
+
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <%- include('./partials/footer'); -%>
+        <%- include('./partials/script'); -%>
+  </body>
+</html>

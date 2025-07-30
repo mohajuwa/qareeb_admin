@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=<%= general.google_map_key %>"></script>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=lan.Zone%> <%=lan.List%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Zone%> <%=lan.List%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card" id="zone_card">
+                      <% let permiss = per != "1" ? per.zone[1] : "1" %>
+                        <% if(permiss == "1"){ %>
+                        <div class="card-header d-flex justify-content-end pb-0">
+                          <a href="/zone/live_driver" class="btn btn-square btn-primary b-r-10 m-r-15" type="button" ><%=lan.Zone%> <%=lan.Driver%>  <%=lan.List%></a>
+                          <button class="btn btn-square btn-primary b-r-10" id="add_zone_click" type="button" ><%=lan.Add%> <%=lan.Zone%></button>
+                        </div>
+                        <% } %>
+                        <div class="card-body">
+                            <div class="table-responsive theme-scrollbar">
+                                <table class="display" id="basic-1">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th><%=lan.Name%></th>
+                                            <th><%=lan.Status%></th>
+                                            <% let permissions = per != "1" ? per.zone[2] : "1" %>
+                                            <% if(permissions == "1"){ %>
+                                            <th><%=lan.Action%></th>
+                                            <% } %>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% var i = 1 %>
+                                        <% zone_data.forEach((data) => { %>
+                                            <tr>
+                                                <td><%= i %></td>
+                                                <td><%= data.name %></td>
+                                                <td>
+                                                    <% if (data.status == '1') { %>
+                                                        <span class="badge badge-success"><%=lan.Active%></span>
+                                                    <% } else { %>
+                                                        <span class="badge badge-danger"><%=lan.Deactive%></span>
+                                                    <% } %>
+                                                </td>
+                                                <% if(permissions == "1"){ %>
+                                                <td> 
+                                                    <ul class="action"> 
+                                                      <li class="edit"> <a href="/zone/edit/<%= data.id%>"><i class="icon-pencil-alt"></i></a></li>
+                                                      <li class="delete"><a href="/zone/delete/<%= data.id %>"><i class="icon-trash"></i></a></li>
+                                                    </ul>
+                                                </td>
+                                                <% } %>
+                                            </tr>
+                                        <% i++ %>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card d-none" id="add_zone_card">
+                        <div class="card-header d-flex justify-content-end pb-0">
+                          <button class="btn btn-square btn-primary b-r-10" id="list_zone_click" type="button" ><%=lan.Zone%> <%=lan.List%></button>
+                        </div>
+                        <div class="card-body">
+                            <form  class="needs-validation" novalidate="" action="/zone/add_zone" method="post">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                                        <label class="col-form-label"><%=lan.Name%></label>
+                                        <input class="form-control" type="text" name="name" placeholder="<%=lan.Enter%> <%=lan.Name%>" required>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                                        <label class="col-form-label"><%=lan.Is_Active%></label>
+                                        <select class="js-example-basic-single" name="status" required>
+                                            <option value="1"><%=lan.Active%></option>
+                                            <option value="0"><%=lan.Inactive%></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <div id="map-canvas" style="height: 75vh; width: 100%;"></div>
+                                        <textarea name="zone_lat_lon" id="add_lat_lon" cols="30" rows="10" hidden></textarea>
+                                    </div>
+                                </div>
+                                <div class="text-end mt-5">
+                                  <button class="btn btn-square btn-primary btn-air-primary add_detail_btn b-r-10" type="submit"><%=lan.Submit%></button> 
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=<%= general.google_map_key %>&libraries=drawing&callback=initMap"></script>
+        <script src="../js/map.js"></script>
+        <%- include('./partials/footer'); -%>
+        <%- include('./partials/script'); -%>
+  </body>
+</html>

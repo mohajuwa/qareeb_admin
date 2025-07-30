@@ -1,0 +1,1294 @@
+<script>
+    
+$(document).ready(function (){
+   
+
+    
+
+    $(document).on('click', '#login_admin', function(){
+        
+        // $('#country_code').select2().val("+91").trigger('change')
+        $('input[name=email]').val('modwir@modwir.com')
+        $('input[name=password]').val('modwir')
+    })
+
+    $(document).on('click', '#login_role', function(){
+        // $('#country_code').select2().val("+91").trigger('change')
+        $('input[name=email]').val('test@modwir.com')
+        $('input[name=password]').val('modwir')
+    })
+
+
+
+    $(document).on("click", ".lang", function(){
+        
+        let lan = $(this).attr("data-value");
+        const base_url = window.location.origin;
+        $.ajax({
+            url: base_url + '/language',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {lan},
+            success: function (res){
+                location.reload()
+            }
+        });
+    })
+
+    if ($("#hidden_lang").val() == 'in') {
+        $("#in").addClass("bg-primary")
+    } else if ($("#hidden_lang").val() == 'de') {
+        $("#de").addClass("bg-primary")
+    } else if ($("#hidden_lang").val() == 'en') {
+        $("#en").addClass("bg-primary")
+    } else if ($("#hidden_lang").val() == 'pt') {
+        $("#pt").addClass("bg-primary")
+    } else if ($("#hidden_lang").val() == 'es') {
+        $("#es").addClass("bg-primary")
+    } else if ($("#hidden_lang").val() == 'fr') {
+        $("#fr").addClass("bg-primary")
+    } else if ($("#hidden_lang").val() == 'cn') {
+        $("#cn").addClass("bg-primary")
+    } else if ($("#hidden_lang").val() == 'ae') {
+        $("#ae").addClass("bg-primary")
+        $("html").attr("dir", "rtl")
+    }
+
+    $(document).on('click', '#add_zone_click', function(){
+        $("#zone_card").addClass("d-none")
+        $("#add_zone_card").removeClass("d-none")
+    })
+
+    $(document).on('click', '#list_zone_click', function(){
+        $("#zone_card").removeClass("d-none")
+        $("#add_zone_card").addClass("d-none")
+    })
+
+    $(document).on("change", "#num_of_passenger", function(){
+        if ($(this).prop("checked") == true) {
+            $("#outstation_passenger").removeClass("d-none")
+        } else {
+            $("#outstation_passenger").addClass("d-none")
+        }
+    })
+
+    $(document).on("change", '#add_doc_require', function(){
+        if ($(this).prop("checked") == true) {
+            $("#req_doc_name").removeClass("d-none")
+            $("#requie_input").attr("required", true)
+        } else {
+            $("#req_doc_name").addClass("d-none")
+            $("#requie_input").removeAttr("required")
+        }
+    })
+
+    $(document).on("click", "#edit_documentdata", function(){
+        let {id, name, require_image_side, input_require, status, req_field_name} = $(this).data()
+
+        $("#edit_doc_form").attr("action", "/driver/edit_document/"+ id)
+        $("#doc_name").val(name)
+        $("#doc_img_side").select2().val(require_image_side).trigger("change")
+
+        if (input_require == "1") {
+            $("#doc_require").prop("checked", true)
+            $("#edit_req_doc_name").removeClass("d-none")
+            $("#edit_requie_input").attr("required", true).val(req_field_name)
+        } else {
+            $("#doc_require").prop("checked", false)
+            $("#edit_req_doc_name").addClass("d-none")
+            $("#edit_requie_input").removeAttr("required").val(req_field_name)
+        }
+
+        status == "1" ? $("#doc_status").prop("checked", true) : $("#doc_status").prop("checked", false)
+    })
+
+    $(document).on("change", '#doc_require', function(){
+        if ($(this).prop("checked") == true) {
+            $("#edit_req_doc_name").removeClass("d-none")
+            $("#edit_requie_input").attr("required", true)
+        } else {
+            $("#edit_req_doc_name").addClass("d-none")
+            $("#edit_requie_input").removeAttr("required")
+        }
+    })
+
+    $(document).on("click", "#edit_prefrencedata", function(){
+        let {id, image, name, status} = $(this).data()
+
+        $("#edit_pre_form").attr("action", "/driver/edit_preference/"+ id)
+        $(".edit_pre_image").attr("src", "../../" + image)
+        $("#edit_pre_name").val(name)
+        status == "1" ? $("#edit_pre_status").prop("checked", true) : $("#edit_pre_status").prop("checked", false)
+    })
+
+    $(document).on("click", "#add_driver_btn", function(){
+        let check = 0;
+        $(".dricheck").each(function(){
+            if ($(this).val() == "" || $(this).val() == null) {
+                check++
+            }
+        })
+
+        if (check != "0") {
+            $("#deriver_detail_error").removeClass("d-none")
+        } else {
+            $("#deriver_detail_error").addClass("d-none")
+            $("#deriver_diffphoneno_error").addClass("d-none")
+            if ($("#primary_phoneNo").val() != $("#secound_phoneNo").val()) {
+                const base_url = window.location.origin;
+                $.ajax({
+                    url: base_url + '/driver/check_derail',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {primaryc:$("#primary_ccode").val(), primaryphone:$("#primary_phoneNo").val(), secoundc:$("#secound_ccode").val(), secoundphone:$("#secound_phoneNo").val()},
+                    success: function (res){
+                        if (res.status == true) {
+                            $("#deriver_phoneno_error").addClass("d-none")
+                            $("#add_driver_form").submit()
+                        } else {
+                            $("#deriver_phoneno_error").removeClass("d-none")
+    
+                        }
+                    }
+                });
+            } else {
+                $("#deriver_diffphoneno_error").removeClass("d-none")
+            }
+        }
+    })
+
+    $(document).on("click", "#edit_driver_btn", async function(){
+        let check = 0;
+        $(".dricheck").each(function(){
+            if ($(this).val() == "" || $(this).val() == null) {
+                check++
+            }
+        })
+
+        if (check != "0") {
+            $("#deriver_detail_error").removeClass("d-none")
+        } else {
+            $("#deriver_detail_error").addClass("d-none")
+            $("#deriver_diffphoneno_error").addClass("d-none")
+            const base_url = window.location.origin;
+            
+            let check = 0;
+            if ($("#primary_ccode").val() != $("#pccode").val() || $("#primary_phoneNo").val() != $("#pphone").val()) {
+                
+                if ($("#primary_phoneNo").val() != $("#secound_phoneNo").val()) {
+
+                    const res = await $.ajax({
+                        url: base_url + '/driver/check_derail',
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: {primaryc: $("#primary_ccode").val(), primaryphone: $("#primary_phoneNo").val()}
+                    });
+
+                    if (res.status === true) $("#deriver_phoneno_error").addClass("d-none");
+                    else {
+                        check = 1;
+                        $("#deriver_phoneno_error").removeClass("d-none");
+                    }
+
+                } else {
+                    $("#deriver_diffphoneno_error").removeClass("d-none")
+                }
+
+            } 
+            
+            if ($("#secound_ccode").val() != $("#sccode").val() || $("#secound_phoneNo").val() != $("#sphone").val()) {
+
+                if ($("#primary_phoneNo").val() != $("#secound_phoneNo").val()) {
+                    const res = await $.ajax({
+                        url: base_url + '/driver/check_derail',
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: {secoundc: $("#secound_ccode").val(), secoundphone: $("#secound_phoneNo").val()}
+                    });
+
+                    if (res.status === true) $("#deriver_phoneno_error").addClass("d-none");
+                    else {
+                        check = 1;
+                        $("#deriver_phoneno_error").removeClass("d-none");
+                    }
+                } else {
+                    $("#deriver_diffphoneno_error").removeClass("d-none")
+                }
+
+            }
+
+            if (check == "0") {
+                $("#edit_driver_form").submit()
+            }
+        }
+    })
+
+    $(document).on("click", '#add_ddocument_btn', function(){
+        let check = 0;
+        $(".doccheck").each(function(){
+            if ($(this).val() == "" || $(this).val() == null) {
+                check++
+            }
+        })
+
+        if (check != "0") {
+            $("#deriver_detail_error").removeClass("d-none")
+        } else {
+            $("#deriver_detail_error").addClass("d-none")
+            $("#doc_form").submit()
+        }
+    })
+
+    $(document).on("click", "#edit_ddocumentdata", function(){
+        let {id, image, driver_id, document_id, document_number, status, imgside, impreq, inpname} = $(this).data()
+
+        $("#edit_doc_form").attr("action", "/driver/edit_documentdata/"+ id)
+        $("#edit_docfirstimg").addClass("d-none")
+        $("#edit_docsecounimg").addClass("d-none")
+        if (imgside == "1") {
+            $("#edit_docfirstimg").removeClass("d-none")
+            $("#firstfile-preview").attr("src", "../../" + image)
+        }
+        if (imgside == "2") {
+            $("#edit_docsecounimg").removeClass("d-none")
+            $("#secondfile-preview").attr("src", "../../" + image)
+        }
+        if (imgside == "3") {
+            $("#edit_docfirstimg").removeClass("d-none")
+            $("#edit_docsecounimg").removeClass("d-none")
+            let splimg = image.split("&!")
+            $("#firstfile-preview").attr("src", "../../" + splimg[0])
+            $("#secondfile-preview").attr("src", "../../" + splimg[1])
+        }
+
+        $("#editdocinname").text("")
+        $("#edit_pre_name").attr('placeholder', '');
+        if (impreq == "1") {
+            $("#docfinput").removeClass("d-none")
+            $("#editdocinname").text(inpname)
+            $("#edit_pre_name").attr('placeholder', 'Enter ' + inpname).val(document_number)
+        } else {
+            $("#docfinput").addClass("d-none")
+        }
+
+        status == "1" ? $("#edit_doc_status").prop("checked", true) : $("#edit_doc_status").prop("checked", false)
+    })
+
+    $(document).on("click", "#add_customer", function(){
+        let check = 0;
+        $(".cdcheck").each(function(){
+            if ($(this).val() == "" || $(this).val() == null) {
+                check++
+            }
+        })
+
+        if (check != "0") {
+            $("#customer_detail_error").removeClass("d-none")
+        } else {
+            $("#customer_detail_error").addClass("d-none")
+            const base_url = window.location.origin;
+            $.ajax({
+                url: base_url + '/customer/check_derail',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {ccode:$("#country_code").val(), phone:$("#cphone").val()},
+                success: function (res){
+                    if (res.status == true) {
+                        $("#customer_phoneno_error").addClass("d-none")
+                        $("#add_customer").submit()
+                    } else {
+                        $("#customer_phoneno_error").removeClass("d-none")
+    
+                    }
+                }
+            });
+        }
+    })
+
+    $(document).on("click", "#edit_customer", function(){
+        let check = 0;
+        $(".cdcheck").each(function(){
+            if ($(this).val() == "" || $(this).val() == null) {
+                check++
+            }
+        })
+
+        if (check != "0") {
+            $("#customer_detail_error").removeClass("d-none")
+        } else {
+            $("#customer_detail_error").addClass("d-none")
+
+            if ($("#coccode").val() != $("#country_code").val() || $("#cophone").val() != $("#ephone").val()) {
+                const base_url = window.location.origin;
+                $.ajax({
+                    url: base_url + '/customer/check_derail',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {ccode:$("#country_code").val(), phone:$("#ephone").val()},
+                    success: function (res){
+                        if (res.status == true) {
+                            $("#customer_phoneno_error").addClass("d-none")
+                            $("#edit_c_form").submit()
+                        } else {
+                            $("#customer_phoneno_error").removeClass("d-none")
+        
+                        }
+                    }
+                });
+            } else {
+                $("#edit_c_form").submit()
+            }
+        }
+    })
+
+    $(document).on('click', '#edit_coupon', function(){
+        let { id, title, sub_title, code, min_amount, discount_amount, start_date, end_date } = $(this).data();
+        
+        $('#coupon_edit_form').attr('action', '/coupon/edit_coupon/' + id);
+        $('#edit_title').attr('value', title);
+        $('#edit_subtitle').attr('value', sub_title);
+        $('.edit_code').attr('value', code);
+        
+        let start_date_date = new Date(start_date);
+        let start_date_day = (start_date_date.getDate() < 10 ? '0' + parseInt(start_date_date.getDate()) : start_date_date.getDate());
+        let start_date_month = (start_date_date.getMonth()+1 < 10 ? '0' + parseInt(start_date_date.getMonth()+1) : start_date_date.getMonth()+1);
+        let start_date_year = start_date_date.getFullYear();
+        let start_dates = `${start_date_year}-${start_date_month}-${start_date_day}`;
+        $('#edit_start').attr('value', start_dates);
+  
+        let end_date_date = new Date(end_date);
+        let end_date_day = (end_date_date.getDate() < 10 ? '0' + parseInt(end_date_date.getDate()) : end_date_date.getDate());
+        let end_date_month = (end_date_date.getMonth()+1 < 10 ? '0' + parseInt(end_date_date.getMonth()+1) : end_date_date.getMonth()+1);
+        let end_date_year = end_date_date.getFullYear();
+        let end_dates = `${end_date_year}-${end_date_month}-${end_date_day}`;
+        $('#edit_end').attr('value', end_dates);
+  
+        $('#edit_minimuma').attr('value', min_amount);
+        $('#edit_discounta').attr('value', discount_amount);
+    })
+
+    $(document).on("change", '#firstimg', function(){
+        let current_row = $(this).parents("#firstmain_image");
+    
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            current_row.find("#firstfile-preview").attr('src', e.target.result);
+        };
+
+        reader.readAsDataURL(file);
+    })
+
+    $(document).on("change", '#secimage', function(){
+        let current_row = $(this).parents("#secoundmain_image");
+    
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            current_row.find("#secondfile-preview").attr('src', e.target.result);
+        };
+
+        reader.readAsDataURL(file);
+    })
+
+    $(document).on("change", "#bidding_status_check", function(){
+        if ($(this).prop("checked") == true) {
+            $("#minfare").removeClass("d-none")
+            $("#maxfare").removeClass("d-none")
+            $("#minfarein").attr("required", true)
+            $("#maxfarein").attr("required", true)
+        } else {
+            $("#minfare").addClass("d-none")
+            $("#maxfare").addClass("d-none")
+            $("#minfarein").removeAttr("required")
+            $("#maxfarein").removeAttr("required")
+        }
+    })
+
+    $(document).on("change", "#acbox", function(){
+        let current_row = $(this).parents("#appdcheckbox");
+        if ($(this).prop("checked") == true) current_row.find("#adddcheck").val("1")
+        else current_row.find("#adddcheck").val("0")
+    })
+
+    $(document).on("click", "#edit_ride_reason_data", function(){
+        let {id, title, status} = $(this).data()
+
+        $("#edit_ride_reason").attr("action", "/settings/edit_ride_c_reason/"+ id)
+        $("#reason_title").attr("value", title)
+
+        status == "1" ? $("#reason_status").prop("checked", true) : $("#reason_status").prop("checked", false)
+    })
+
+    $(document).on("click", "#edit_review_data", function(){
+        let {id, title, status} = $(this).data()
+
+        $("#edit_review_reason").attr("action", "/settings/edit_review_reason/"+ id)
+        $("#review_title").attr("value", title)
+
+        status == "1" ? $("#review_status").prop("checked", true) : $("#review_status").prop("checked", false)
+    })
+
+    $(document).on("click", "#dpro_publish_ride", function(){
+        const {drid} = $(this).data();
+        const base_url = window.location.origin;
+        $.ajax({
+            url: base_url + '/driver/profile_publish_ride',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {status: 0, drid},
+            success: function (res){
+                $(".dri_publish_ride").html("");
+                $(".dri_my_ride").html("");
+                $(".dri_wtransaction_list").html("");
+
+                let lan = res.lan;
+                let data = `<div class="row" id="favouriteData">
+                                <div class="table-responsive theme-scrollbar">
+                                    <table class="display" id="basic-1">
+                                        <thead>
+                                            <tr> <th class="d-none"></th>
+                                                <th>${lan.Ride} ${lan.ID}</th>
+                                                <th>${lan.Pickup}</th>
+                                                <th>${lan.Drop_Off}</th>
+                                                <th>${lan.Date}</th>
+                                                <th>${lan.Ride} ${lan.Status}</th>
+                                            </tr>
+                                        </thead>
+                                    <tbody>`;
+
+                if (res.requests != "") {
+                    $.each(res.requests, function(index, value){
+                        let status = "";
+                        if (value.status == "0") status = `<span class="badge badge-secondary">${lan.New} ${lan.Ride} ${lan.Request}</span>`;
+                        if (value.status == "1") status = `<span class="badge badge-success">${lan.Accepted}</span>`;
+                        if (value.status == "2") status = `<span class="badge badge-success">${lan.Arrived_at_the_location}</span>`;
+                        if (value.status == "3") status = `<span class="badge badge-success">${lan.Confirm} ${lan.Ride}</span>`;
+                        if (value.status == "4") status = `<span class="badge badge-danger">${lan.Canceled}</span>`;
+                        if (value.status == "5") status = `<span class="badge badge-success">${lan.Ride} ${lan.Start}</span>`;
+                        if (value.status == "6") status = `<span class="badge badge-success">${lan.Ride} ${lan.End}</span>`;
+                        if (value.status == "7") status = `<span class="badge badge-success">${lan.Waiting} ${lan.Payment}</span>`;
+                        if (value.status == "8") status = `<span class="badge badge-success">${lan.Complete}</span>`;
+                        
+                        data += `<tr>
+                                    <td class="d-none"></td>
+                                    <td>#${value.id}</td>
+                                    <td>${value.pic_address}</td>
+                                    <td>${value.drop_address}</td>
+                                    <td>${value.start_time}</td>
+                                    <td>${status}</td>
+                                </tr>`;                  
+                    });
+
+                }
+                data += `</tbody>
+                      </table>
+                  </div>
+                </div>`;
+
+                $(".dri_publish_ride").html(data)
+                $('#basic-1').DataTable({ "responsive": true, "paging": true, "searching": true, "info": true });
+            }
+        });
+
+    });
+
+    $(document).on("click", "#dpro_my_ride", function(){
+        const {drid} = $(this).data();
+        const base_url = window.location.origin;
+        $.ajax({
+            url: base_url + '/driver/profile_publish_ride',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {status: 1, drid},
+            success: function (res){
+                $(".dri_publish_ride").html("");
+                $(".dri_my_ride").html("");
+                $(".dri_wtransaction_list").html("");
+
+                let lan = res.lan;
+                let data = `<div class="row" id="favouriteData">
+                                <div class="table-responsive theme-scrollbar">
+                                    <table class="display" id="basic-1">
+                                        <thead>
+                                            <tr>
+                                                <th class="d-none"></th>
+                                                <th>${lan.Ride} ${lan.ID}</th>
+                                                <th>${lan.Pickup}</th>
+                                                <th>${lan.Drop_Off}</th>
+                                                <th>${lan.Date}</th>
+                                                <th>${lan.Ride} ${lan.Status}</th>
+                                            </tr>
+                                        </thead>
+                                    <tbody>`;
+
+                if (res.requests != "") {
+                    $.each(res.requests, function(index, value){
+                        let status = ""
+                        if (value.status == "0") status = `<span class="badge badge-secondary">${lan.New} ${lan.Ride} ${lan.Request}</span>`;
+                        if (value.status == "1") status = `<span class="badge badge-success">${lan.Accepted}</span>`;
+                        if (value.status == "2") status = `<span class="badge badge-success">${lan.Arrived_at_the_location}</span>`;
+                        if (value.status == "3") status = `<span class="badge badge-success">${lan.Confirm} ${lan.Ride}</span>`;
+                        if (value.status == "4") status = `<span class="badge badge-danger">${lan.Canceled}</span>`;
+                        if (value.status == "5") status = `<span class="badge badge-success">${lan.Ride} ${lan.Start}</span>`;
+                        if (value.status == "6") status = `<span class="badge badge-success">${lan.Ride} ${lan.End}</span>`;
+                        if (value.status == "7") status = `<span class="badge badge-success">${lan.Waiting} ${lan.Payment}</span>`;
+                        if (value.status == "8") status = `<span class="badge badge-success">${lan.Complete}</span>`;
+                        
+                        data += `<tr>
+                                <td class="d-none"></td>
+                                <td>#${value.id}</td>
+                                <td>${value.pic_address}</td>
+                                <td>${value.drop_address}</td>
+                                <td>${value.start_time}</td>
+                                <td>${status}</td>
+                            </tr>`;                  
+                    });
+
+                }
+                data += `</tbody>
+                      </table>
+                  </div>
+                </div>`;
+
+                $(".dri_my_ride").html(data);
+                $('#basic-1').DataTable({ "responsive": true, "paging": true, "searching": true, "info": true });
+            }
+        });
+
+    });
+
+    $(document).on("click", "#dpro_wtransaction", function(){
+        const {drid} = $(this).data();
+        const base_url = window.location.origin;
+        $.ajax({
+            url: base_url + '/driver/profile_publish_ride',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {status: 2, drid},
+            success: function (res){
+                $(".dri_publish_ride").html("");
+                $(".dri_my_ride").html("");
+                $(".dri_wtransaction_list").html("");
+
+                let lan = res.lan;
+                let data = `<div class="row" id="favouriteData">
+                                <div class="table-responsive theme-scrollbar">
+                                    <table class="display" id="basic-1">
+                                        <thead>
+                                            <tr>
+                                                <th class="d-none"></th>
+                                                <th>${lan.ID}</th>
+                                                <th>${lan.Payment} ${lan.Method}</th>
+                                                <th>${lan.Txn_Id}</th>
+                                                <th>${lan.Date}</th>
+                                                <th>${lan.Total} ${lan.Amount}</th>
+                                            </tr>
+                                        </thead>
+                                    <tbody>`;
+
+                if (res.requests != "") {
+                    $.each(res.requests, function(index, value){
+                        let pay_method = "", pay_id = "", amount = 0;
+                        if (value.status == "1") {
+                            pay_method = value.pay_name; pay_id = `#${value.payment_id}`; amount = value.amount;
+                        }
+                        if (value.status == "2") {
+                            pay_method = value.p_type; pay_id = value.type; amount = `-${value.amount}`;
+                        }
+
+                        data += `<tr>
+                                    <td class="d-none"></td>
+                                    <td>${index+1}</td>
+                                    <td>${pay_method}</td>
+                                    <td>${pay_id}</td>
+                                    <td>${value.date}</td>
+                                    <td class="invosymbol">${amount}</td>
+                                </tr>`;                  
+                    });
+                }
+                
+                data += `</tbody>
+                      </table>
+                  </div>
+                </div>`;
+
+                $(".dri_wtransaction_list").html(data);
+                $('#basic-1').DataTable({ "responsive": true, "paging": true, "searching": true, "info": true });
+                currency()
+            }
+        });
+    });
+
+
+
+
+
+    $(document).on("click", "#cdpro_publish_ride", function(){
+        const {drid} = $(this).data();
+        const base_url = window.location.origin;
+        $.ajax({
+            url: base_url + '/customer/profile_publish_ride',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {status: 0, drid},
+            success: function (res){
+                $(".dri_publish_ride").html("");
+                $(".dri_my_ride").html("");
+                $(".dri_wtransaction").html("");
+
+                let lan = res.lan;
+                let data = `<div class="row" id="favouriteData">
+                                <div class="table-responsive theme-scrollbar">
+                                    <table class="display" id="basic-1">
+                                        <thead>
+                                            <tr>
+                                                <th>${lan.Ride} ${lan.ID}</th>
+                                                <th>${lan.Pickup}</th>
+                                                <th>${lan.Drop_Off}</th>
+                                                <th>${lan.Date}</th>
+                                                <th>${lan.Ride} ${lan.Status}</th>
+                                            </tr>
+                                        </thead>
+                                    <tbody>`;
+
+                if (res.requests != "") {
+                    $.each(res.requests, function(index, value){
+                        let status = ""
+                        if (value.status == "0") status = `<span class="badge badge-secondary">${lan.New} ${lan.Ride} ${lan.Request}</span>`;
+                        if (value.status == "1") status = `<span class="badge badge-success">${lan.Accepted}</span>`;
+                        if (value.status == "2") status = `<span class="badge badge-success">${lan.Arrived_at_the_location}</span>`;
+                        if (value.status == "3") status = `<span class="badge badge-success">${lan.Confirm} ${lan.Ride}</span>`;
+                        if (value.status == "4") status = `<span class="badge badge-danger">${lan.Canceled}</span>`;
+                        if (value.status == "5") status = `<span class="badge badge-success">${lan.Ride} ${lan.Start}</span>`;
+                        if (value.status == "6") status = `<span class="badge badge-success">${lan.Ride} ${lan.End}</span>`;
+                        if (value.status == "7") status = `<span class="badge badge-success">${lan.Waiting} ${lan.Payment}</span>`;
+                        if (value.status == "8") status = `<span class="badge badge-success">${lan.Complete}</span>`;
+                        
+                        data += `<tr>
+                                    <td>#${value.id}</td>
+                                    <td>${value.pic_address}</td>
+                                    <td>${value.drop_address}</td>
+                                    <td>${value.start_time}</td>
+                                    <td>${status}</td>
+                                </tr>`;                  
+                    });
+
+                }
+                data += `</tbody>
+                      </table>
+                  </div>
+                </div>`;
+
+                $(".dri_publish_ride").html(data)
+                $('#basic-1').DataTable({ "responsive": true, "paging": true, "searching": true, "info": true });
+            }
+        });
+
+    });
+
+    $(document).on("click", "#cdpro_my_ride", function(){
+        const {drid} = $(this).data();
+        const base_url = window.location.origin;
+        $.ajax({
+            url: base_url + '/customer/profile_publish_ride',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {status: 1, drid},
+            success: function (res){
+                $(".dri_publish_ride").html("");
+                $(".dri_my_ride").html("");
+                $(".dri_wtransaction").html("");
+                let lan = res.lan;
+                let data = `<div class="row" id="favouriteData">
+                                <div class="table-responsive theme-scrollbar">
+                                    <table class="display" id="basic-1">
+                                        <thead>
+                                            <tr>
+                                                <th>${lan.Ride} ${lan.ID}</th>
+                                                <th>${lan.Pickup}</th>
+                                                <th>${lan.Drop_Off}</th>
+                                                <th>${lan.Date}</th>
+                                                <th>${lan.Ride} ${lan.Status}</th>
+                                            </tr>
+                                        </thead>
+                                    <tbody>`;
+
+                if (res.requests != "") {             
+                    $.each(res.requests, function(index, value){
+                        let status = ""
+                        if (value.status == "0") status = `<span class="badge badge-secondary">${lan.New} ${lan.Ride} ${lan.Request}</span>`;
+                        if (value.status == "1") status = `<span class="badge badge-success">${lan.Accepted}</span>`;
+                        if (value.status == "2") status = `<span class="badge badge-success">${lan.Arrived_at_the_location}</span>`;
+                        if (value.status == "3") status = `<span class="badge badge-success">${lan.Confirm} ${lan.Ride}</span>`;
+                        if (value.status == "4") status = `<span class="badge badge-danger">${lan.Canceled}</span>`;
+                        if (value.status == "5") status = `<span class="badge badge-success">${lan.Ride} ${lan.Start}</span>`;
+                        if (value.status == "6") status = `<span class="badge badge-success">${lan.Ride} ${lan.End}</span>`;
+                        if (value.status == "7") status = `<span class="badge badge-success">${lan.Waiting} ${lan.Payment}</span>`;
+                        if (value.status == "8") status = `<span class="badge badge-success">${lan.Complete}</span>`;
+                        
+                        data += `<tr>
+                                <td>#${value.id}</td>
+                                <td>${value.pic_address}</td>
+                                <td>${value.drop_address}</td>
+                                <td>${value.start_time}</td>
+                                <td>${status}</td>
+                            </tr>`;                  
+                    });
+
+                }
+                data += `</tbody>
+                      </table>
+                  </div>
+                </div>`;
+
+                $(".dri_my_ride").html(data)
+                $('#basic-1').DataTable({ "responsive": true, "paging": true, "searching": true, "info": true });
+            }
+        });
+
+    });
+
+    $(document).on("click", "#cdpro_wtransaction", function(){
+        const {drid} = $(this).data();
+        const base_url = window.location.origin;
+        $.ajax({
+            url: base_url + '/customer/profile_publish_ride',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {status: 2, drid},
+            success: function (res){
+                $(".dri_publish_ride").html("");
+                $(".dri_my_ride").html("");
+                $(".dri_wtransaction").html("");
+
+                let lan = res.lan;
+                let data = `<div class="row" id="favouriteData">
+                                <div class="table-responsive theme-scrollbar">
+                                    <table class="display" id="basic-1">
+                                        <thead>
+                                            <tr>
+                                                <th>${lan.ID}</th>
+                                                <th>${lan.Payment} ${lan.Method}</th>
+                                                <th>${lan.Txn_Id}</th>
+                                                <th>${lan.Date}</th>
+                                                <th>${lan.Total} ${lan.Amount}</th>
+                                            </tr>
+                                        </thead>
+                                    <tbody>`;
+
+                if (res.requests != "") {
+                    
+                    $.each(res.requests, function(index, value){
+                        
+                        data += `<tr>
+                                <td>${index+1}</td>
+                                <td>${value.payment_name}</td>
+                                <td>#${value.payment_id}</td>
+                                <td>${value.date}</td>
+                                <td class="invosymbol">${value.amount}</td>
+                            </tr>`;                  
+                    });
+
+                }
+                data += `</tbody>
+                      </table>
+                  </div>
+                </div>`;
+
+                $(".dri_wtransaction").html(data)
+                $('#basic-1').DataTable({ "responsive": true, "paging": true, "searching": true, "info": true });
+                currency()
+            }
+        });
+
+    });
+
+    $(document).on('click', '#complete_wpayment', function(){
+        let { id, image, p_type, upi_id, paypal_id, bank_no, bank_ifsc, bank_type } = $(this).data();
+        $("#payment_sid").val(id)
+        if (image != "") $(".spayimg").attr('src', "../../" + image)
+        else $(".spayimg").attr('src', "../images/dashboard/default/profile.png")
+        $("#pay_urp").addClass('d-none')
+        $("#pay_paypal").addClass('d-none')
+        $("#pay_account").addClass('d-none')
+        if (p_type == "1") {
+            $("#pay_urp").removeClass('d-none')
+            $(".pupi_data").text('').text(upi_id)
+        }
+        if (p_type == "2") {
+            $("#pay_paypal").removeClass('d-none')
+            $(".ppaypal_data").text('').text(paypal_id)
+        }
+        if (p_type == "3") {
+            $("#pay_account").removeClass('d-none')
+            $(".pbankac_data").text('').text(bank_no)
+            $(".pifsc_data").text('').text(bank_ifsc)
+            $(".pactype_data").text('').text(bank_type)
+        }
+    })
+
+    $(document).on('click', '#edit_def_noti', function(){
+        let { id, title } = $(this).data();
+        
+        $('#edit_form_def_noti').attr('action', '/driver/edit_def_noti/' + id);
+        $('#edit_def_noti_title').val(title);
+    })
+
+    $(document).on('click', '#edit_cash_amount', function(){
+        let { id, cash_amount } = $(this).data();
+        
+        $('#edit_cash_form').attr('action', '/driver/update_cash_amount/' + id);
+        $('#cash_amount_input').attr("value", cash_amount);
+    })
+
+    $(document).on('click', '#edit_cash_status', function(){
+        let { id, prof_image, payment_type, date, amount, status } = $(this).data();
+
+        $('#cash_edit_status_form').attr('action', '/driver/update_cash_status/' + id);
+        $('#edit_cash_imga').attr("href", `../../${prof_image}`);
+        $('#edit_cash_img').attr("src", `../../${prof_image}`);
+        $(".cash_pm").text('').text(payment_type);
+        $(".cash_date").text('').text(date);
+        $(".cash_amount").text('').text(amount);
+
+        status == "1" ? $("#cash_status").prop("checked", true) : $("#cash_status").prop("chekced", false);
+    })
+
+    $(document).on('click', '#edit_faq_data', function(){
+        let { id, title, description, status } = $(this).data();
+
+        $('#edit_faq_form').attr('action', '/settings/edit_faq/' + id);
+        $("#faq_title").attr("value", title)
+        $("#faq_description").val(description)
+
+        status == "1" ? $("#faq_status").prop("checked", true) : $("#faq_status").prop("chekced", false);
+    })
+
+    $(document).on("click", '#chat_user', function(){
+        if ($(this).hasClass("chat_background") === false) {
+            
+            $(".chat_div").each(function() {
+                $(this).removeClass("chat_background")
+            })
+            
+            $(this).addClass("chat_background")
+            $(this).find("#new_message").addClass("d-none")
+            const { id, sender, reciver } = $(this).data();
+            
+            const base_url = window.location.origin;
+            $.ajax({
+                url: base_url + '/customer/customer_chat_list',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {id, sender, reciver},
+                success: function (res){
+                    $("#chat_profile_user").html("").html(`${res.user[0].first_name} ${res.user[0].last_name}`);
+                    $("#chat_profile_time").html("").html('Last Message ' + res.last_data) ;
+                    $("#senderu_id").val("").val(res.send_id);
+                    $("#chat_detail").html("");
+    
+                    $.each(res.all_chat, function(index, value){
+                        let dateHTML = ""
+                        dateHTML = '<li class="text-center my-2">'+
+                                        '<span class="f-w-500">'+ value.date +'</span>'+
+                                    '</li>';
+                        
+                        $.each(value.chat, function(i, time){
+                            if (time.status === 1 ) {
+                                
+                                dateHTML += '<li class="clearfix">'+
+                                                '<div class="message other-message pull-right py-1 mb-1 bg-light-primary" style="width: fit-content; max-width: 50%;">'+
+                                                    '<div class="message-data m-0"><span class="message-data-time">'+ time.date +'</span></div>'+
+                                                    '<span style="color: black !important;">'+ time.message +'</span>'+
+                                                '</div>'+
+                                            '</li>';
+                            } else {
+                                dateHTML += '<li>'+
+                                                '<div class="message my-message py-1 mb-1" style="width: fit-content; max-width: 50%;">'+
+                                                    '<div class="message-data text-end m-0"><span class="message-data-time">'+ time.date +'</span></div>'+
+                                                    '<span style="color: black !important;">'+ time.message +'</span>'+
+                                                '</div>'+
+                                            '</li>';
+                            }
+                        });
+                        dateHTML += '</div>';
+    
+                        $("#chat_detail").append(dateHTML);
+                    });
+    
+                    let chatDetail = document.getElementById('scrollbottom');
+                    chatDetail.scrollTop = chatDetail.scrollHeight;
+                }
+            });
+        }
+
+    })
+
+    $(document).on("change", "#selecttype", function(){
+        if( $(this).val() == "2" ) $("#notiuser").removeClass("d-none")
+        else $("#notiuser").addClass("d-none")
+    })
+
+    $(document).on("change", "#allcus", function(){
+        if ($("#ncustomer").select2().val() != null) {
+            $("#ncustomer").select2().val('').trigger('change')
+            $("#allcus").prop("checked", true)
+        }
+    })
+    
+    $(document).on("change", "#ncustomer", function(){
+        $("#allcus").prop("checked", false)
+    })
+    
+    $(document).on("change", "#allsitt", function(){
+        if ($("#nsitter").select2().val() != null) {
+            $("#nsitter").select2().val('').trigger('change')
+            $("#allsitt").prop("checked", true)
+        }
+    })
+
+    $(document).on("change", "#nsitter", function(){
+        $("#allsitt").prop("checked", false)
+    })
+
+    $(document).on("click", "#notificatio_btn", function(){
+        if ($(".ncheckt").val() == "" || $(".ncheckd").val() == "") {
+            $("#send_all").removeClass("d-none")
+        } else {
+            if ($('.selecttype').is(":checked") === false) {
+                $("#send_all").removeClass("d-none")
+            } else {
+                let stype = $("input[name='selecttype']:checked").val()
+                if (stype == "2") {
+                    let check = 0
+                    if ($("#ncustomer").select2().val() !== null || $("#allcus").prop("checked") !== false || $("#nsitter").select2().val() !== null || $("#allsitt").prop("checked") !== false) {
+                        $("#send_all").addClass("d-none")
+                        $("#sendnform").submit()
+                    } else {
+                        $("#send_all").removeClass("d-none")
+                    }
+                } else if (stype == "1") {
+                    $("#send_all").addClass("d-none")
+                    $("#sendnform").submit()
+                }
+            }
+        }
+    })
+
+    $(document).on("change", "#report_d_date", function(){
+        let date = $(this).val();
+        let sid = $("#report_d_driver").select2().val();
+        dailyReport(date, sid);
+    })
+
+    $(document).on("change", "#report_d_driver", function(){
+        let sid = $(this).select2().val();
+        let date = $("#report_d_date").val();
+        dailyReport(date, sid);
+    })
+
+    function dailyReport(date, sid) {
+        const base_url = window.location.origin;
+        $.ajax({
+            url: base_url + '/report/daily_data',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {date, sid},
+            success: function (res){
+                if (res.daily_list != "") {
+                    $("#dtotal").text(res.daily_list[0].total);
+                    $("#daccept").text(res.daily_list[1].accept);
+                    $("#diamhere").text(res.daily_list[2].iamhere);
+                    $("#denterotp").text(res.daily_list[3].enterotp);
+                    $("#dcancel").text(res.daily_list[4].cancel);
+                    $("#dstart").text(res.daily_list[5].start);
+                    $("#dend").text(res.daily_list[6].end);
+                    $("#dridecomplete").text(res.daily_list[7].ridecomplete);
+                    $("#dcomplete").text(res.daily_list[8].complete);
+                }
+            }
+        }); 
+    }
+
+    $(document).on("click", "#role_fbtn", function(){
+        let check = 0, checkbox = 0
+        $(".checkin").each(function(){
+            if($(this).val() == "" || $(this).val() == null) check += 1
+        })
+
+        $(".checkinc").each(function(){
+            if($(this).prop("checked") == true) checkbox += 1
+        })
+
+        if (check != 0 || checkbox == 0) {
+            $("#role_all_check").removeClass("d-none")
+        } else {
+            $("#role_all_check").addClass("d-none")
+
+            const base_url = window.location.origin;
+            $.ajax({
+                url: base_url + '/role/check_data',
+                type: 'POST',
+                dataType: 'JSON',
+                // data: {country: $("#role_countrycode").select2().val(), phone: $("#role_phone").val()},
+                data: {email: $("#add_role_email").val()},
+                success: function (res){
+                    if (res.status == false) {
+                        $("#role_phone_check").removeClass("d-none");
+                    } else {
+                        $("#role_phone_check").addClass("d-none");
+                        $("#role_form").submit()
+                    }
+                }
+            });    
+        }
+    })
+
+    $(document).on("click", '#edit_role_fbtn', function(){
+        let check = 0, checkbox = 0
+        $(".checkin").each(function(){
+            if($(this).val() == "" || $(this).val() == null) check += 1
+        })
+
+        $(".checkinc").each(function(){
+            if($(this).prop("checked") == true) checkbox += 1
+        })
+        if (check != 0 || checkbox == 0) {
+            $("#erole_all_check").removeClass("d-none");
+        } else {
+            $("#erole_all_check").addClass("d-none");
+            // if ($("#erole_countrycode").select2().val() != $("#rold_code").val() || $("#erole_phone").val() != $("#rold_phone").val()) {
+            if ($("#edit_email").val() != $("#rold_email").val()) {
+                const base_url = window.location.origin;
+                $.ajax({
+                    url: base_url + '/role/check_data',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    // data: {country: $("#erole_countrycode").select2().val(), phone: $("#erole_phone").val()},
+                    data: {email: $("#edit_email").val()},
+                    success: function (res){
+                        if (res.status == false) {
+                            $("#erole_phone_check").removeClass("d-none");
+                        } else {
+                            $("#erole_phone_check").addClass("d-none");
+                            $("#erole_form").submit();
+                        }
+                    }
+                });   
+            } else {
+                $("#erole_form").submit();
+            }
+        }
+    })
+
+    $(document).on("click", '#edit_admin', function(){
+        let check = 0
+        $(".cdcheck").each(function(){
+            if($(this).val() == "" || $(this).val() == null) check += 1
+        })
+        if (check != 0) {
+            $("#admin_detail_error").removeClass("d-none");
+        } else {
+            $("#admin_detail_error").addClass("d-none");
+            if ($("#admin_email").val() != $("#adminemail").val()) {
+            // if ($("#country_code").select2().val() != $("#coccode").val() || $("#ephone").val() != $("#cophone").val()) {
+                const base_url = window.location.origin;
+                $.ajax({
+                    url: base_url + '/check_admin',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    // data: {country: $("#country_code").select2().val(), phone: $("#ephone").val()},
+                    data: {email: $("#admin_email").val()},
+                    success: function (res){
+                        if (res.status == false) {
+                            $("#admin_phoneno_error").removeClass("d-none");
+                        } else {
+                            $("#admin_phoneno_error").addClass("d-none");
+                            $("#edit_admin_form").submit()
+                        }
+                    }
+                });   
+            } else {
+                $("#edit_admin_form").submit()
+            }
+        }
+    })
+
+    $(document).on("change", '#payreports', function(){
+        let sdate = $(this).val();
+        let edate = $("#payreporte").val();
+          
+        PaymentReportDetail(sdate, edate)
+    })
+
+    $(document).on("change", '#payreporte', function(){
+        let sdate = $("#payreports").val();
+        let edate = $(this).val();
+        
+        PaymentReportDetail(sdate, edate)
+    })
+
+    function PaymentReportDetail(sdate, edate) {
+        const base_url = window.location.origin;
+        $.ajax({
+            url: base_url + '/report/rpaymentd',
+            type: 'POST',
+            dataType: 'JSON',
+            data: { sdate, edate },
+            success: function (res) {
+                if ($.fn.DataTable.isDataTable('#basic-1')) {
+                    $('#basic-1').DataTable().destroy();
+                }
+
+                $("#ride_payment_report").html("");
+                if (res.data != "") {
+
+                    let data = '';
+                    $.each(res.data, function (i, v) {
+                        let sta = v.pay_name ? v.pay_name : res.wdata;
+                        data += '<tr>' +
+                            '<td>' + (i + 1) + '</td>' +
+                            '<td>' + v.cname + '</td>' +
+                            '<td>' + v.dfname + ' ' + v.dlname + '</td>' +
+                            '<td><a href="/rides/codetail/' + v.id + '">#' + v.id + '</a></td>' +
+                            '<td>' + sta + '</td>' +
+                            '<td class="invosymbol">' + v.price + '</td>' +
+                            '<td>' + v.start_time + '</td>' +
+                            '</tr>';
+                    });
+
+                    $("#ride_payment_report").html(data);
+                }
+                $('#basic-1').DataTable({ "responsive": true, "paging": true, "searching": true, "info": true });
+                currency();
+            }
+        });
+    }
+
+    $(document).on("click", '#down_pay_report', function(){
+        let sdate = $("#payreports").val();
+        let edate = $(this).val();
+        
+        DoenloadPaymentReportDetail(sdate, edate)
+    })
+
+    function DoenloadPaymentReportDetail(sdate, edate) {
+        const base_url = window.location.origin;
+        
+        window.location.href = base_url + '/report/down_rpaymentd/' + sdate + '&' + edate
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+currency()
+thousands_separators()        
+})
+
+//<<<<<<<< gen coupon code >>>>>>>
+$(document).on('click', '#gen_code', function () {
+    $('#coupon_code').val(makeid(6));
+    return false;
+});
+
+function makeid(length) {
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+function showPreview(event) {
+    if (event.target.files.length > 0) {
+        let src = URL.createObjectURL(event.target.files[0]);
+        let preview = document.getElementById("file-preview");
+        preview.src = src;
+    };
+};
+
+function secondshowPreview(event) {
+    if (event.target.files.length > 0) {
+        let src = URL.createObjectURL(event.target.files[0]);
+        let preview = document.getElementById("second-file-preview");
+        preview.src = src;
+    };
+};
+
+function currency(){
+    let sym = $('#rate_sym').val()
+    let pls = $('#rate_pla').val()
+  
+    if(pls == 1){
+        let users = document.getElementsByClassName('invosymbol');
+        let user_length = users.length
+        for (let i = 0; i < user_length; ++i) {
+            let user = users[i];
+          
+            if (user.innerHTML.indexOf(sym) > -1){
+
+                user.innerHTML =  user.innerHTML +' ';
+            } else {
+                user.innerHTML =  user.innerHTML +' '+ sym;
+            }
+        }
+    }else{
+        let users = document.getElementsByClassName('invosymbol');
+        let user_length = users.length
+        for (let i = 0; i < user_length; ++i) {
+            let user = users[i];
+
+            if (user.innerHTML.indexOf(sym) > -1) {
+
+                user.innerHTML = ' '+ user.innerHTML;
+            } else {
+                user.innerHTML = sym +' '+ user.innerHTML;
+            }
+        }
+    }
+        
+}
+
+function thousands_separators(){
+    let thousands_replace = $('#thousand_replace').val()
+    let num = document.getElementsByClassName("invosymbol")
+  
+    let separator;
+    if (thousands_replace == '1') {
+      separator = ','
+    } else if (thousands_replace == '2') {
+      separator = '.'
+    } else if (thousands_replace == '3') {
+      separator = '`'
+    } else if (thousands_replace == '4') {
+      separator = ''
+    } else {
+      separator = ' '
+    }
+  
+    let num_length = num.length
+    for (let i = 0; i < num_length; ++i) {
+        let val = num[i]
+        let data = val.innerHTML
+        let num_parts = data.toString().split(".");
+        num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+        
+        val.innerHTML = num_parts.join(".")
+    }
+}
+
+</script>

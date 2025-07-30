@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3> <%=lan.Edit%> <%=lan.Payment%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Payment%></li>
+                    <li class="breadcrumb-item active"><%=lan.Edit%> <%=lan.Payment%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-body">
+                    <form  class="needs-validation" novalidate="" action="/settings/edit_payment_data/<%=payment_list[0].id%>" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center form-group">
+                                <% if(payment_list[0].image == null){ %>
+                                    <img id="file-preview" width="150" height="150" src="../images/dashboard/default/profile.png" alt="image">
+                                <% } else { %>
+                                    <img id="file-preview" width="150" height="150" src="../../<%=payment_list[0].image%>" alt="image">
+                                <% }; %>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                                    <label class="col-form-label"><%=lan.Upload%> <%=lan.img%></label>
+                                    <input class="form-control" style="height: 47px;" type="file" name="image" onchange="showPreview(event)" >
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                                    <label class="col-form-label"><%=lan.Payment%> <%=lan.Gateway%> <%=lan.Name%></label>
+                                    <input class="form-control" type="text" name="name" value="<%=payment_list[0].name%>" placeholder="<%=lan.Enter%>  <%=lan.Name%>" required>
+                                </div>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 form-group">
+                                    <label class="col-form-label"><%=lan.Payment%> <%=lan.Gateway%> <%=lan.SubTitle%></label>
+                                    <input class="form-control" type="text" name="sub_title" value="<%=payment_list[0].sub_title%>" placeholder="<%=lan.Enter%> <%=lan.SubTitle%>" required>
+                                </div>
+
+                                <% if (payment_list[0].id == "10") { %>
+                                  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                                    <label class="col-form-label"><%=lan.Upload%> <%=lan.QR_Code%></label>
+                                    <input class="form-control" style="height: 47px;" type="file" name="qrcode" onchange="secondshowPreview(event)" >
+                                  </div>
+
+                                  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                                    <% if(attribute[0] == null){ %>
+                                        <img id="second-file-preview" width="150" height="150" src="../images/dashboard/default/profile.png" alt="image">
+                                    <% } else { %>
+                                        <img id="second-file-preview" width="150" height="150" src="../../<%=attribute[0]%>" alt="image">
+                                    <% }; %>
+                                  </div>
+                                  
+
+
+                                <% } else if (payment_list[0].id == "11") { %>
+
+                                  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                                    <label class="col-form-label"><%=lan.Bank%> <%=lan.Name%></label>
+                                    <input class="form-control" type="text" name="bankname" value="<%=attribute[0]%>" placeholder="<%=lan.Enter%> <%=lan.Bank%> <%=lan.Name%>" required>
+                                  </div>
+
+                                  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                                    <label class="col-form-label"><%=lan.Bank%> <%=lan.Holder%> <%=lan.Name%></label>
+                                    <input class="form-control" type="text" name="bholder" value="<%=attribute[1]%>" placeholder="<%=lan.Enter%> <%=lan.Bank%> <%=lan.Holder%> <%=lan.Name%>" required>
+                                  </div>
+
+                                  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                    <label class="col-form-label"><%=lan.Account%> <%=lan.No%></label>
+                                    <input class="form-control" type="text" name="accno" value="<%=attribute[2]%>" placeholder="<%=lan.Enter%> <%=lan.Account%> <%=lan.No%>" required>
+                                  </div>
+
+                                  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                    <label class="col-form-label"><%=lan.IFSC%> <%=lan.Code%></label>
+                                    <input class="form-control" type="text" name="ifccode" value="<%=attribute[3]%>" placeholder="<%=lan.Enter%> <%=lan.IFSC%> <%=lan.Code%>" required>
+                                  </div>
+
+                                  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                                    <label class="col-form-label"><%=lan.Swift%> <%=lan.Code%></label>
+                                    <input class="form-control" type="text" name="swiftcode" value="<%=attribute[4]%>" placeholder="<%=lan.Enter%> <%=lan.Swift%> <%=lan.Code%>" required>
+                                  </div>
+
+                                <% } else { %>
+
+                                  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 form-group">
+                                      <label class="col-form-label"><%=lan.Payment%> <%=lan.Gateway%> <%=lan.Attributes%></label>
+                                      <select class="custome_select_create form-control shitter_input" multiple="multiple" name="attribute" required>
+                                          <% attribute.forEach(function(data){ %>
+                                            <option value="<%=data%>" selected><%=data%></option>
+                                          <% }); %>
+                                      </select>
+                                  </div>
+
+                                <% }; %>
+
+
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                                    <label class="col-form-label"><%=lan.Payment%> <%=lan.Gateway%> <%=lan.Status%></label>
+                                    <select class="js-example-basic-single" name="status" required>
+                                      <option value="1" <%= payment_list[0].status == "1" ? 'selected' : '' %>><%=lan.Publish%></option>
+                                      <option value="0" <%= payment_list[0].status == "0" ? 'selected' : '' %>><%=lan.UnPublish%></option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                                    <div class="d-flex mb-2" style="margin-top: 40px;">
+                                        <div class="icon-state switch-outline">
+                                          <label class="switch">
+                                            <input type="checkbox" name="wallet_status" <%= payment_list[0].wallet_status == "1" ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                                          </label>
+                                        </div>
+                                        <label class="col-form-label m-l-10"><%=lan.Show_on_Wallet%>?</label>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="old_image" value="<%=payment_list[0].image%>">
+                            </div>
+                        </div>
+                        <div class="text-end mt-3">
+                          <button class="btn btn-square btn-primary btn-air-primary add_detail_btn b-r-10" type="submit"><%=lan.Submit%></button>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <%- include('./partials/footer'); -%>
+        <%- include('./partials/script'); -%>
+  </body>
+</html>

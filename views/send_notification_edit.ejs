@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=lan.Edit%> <%=lan.Send%> <%=lan.Notification%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Edit%> <%=lan.Send%> <%=lan.Notification%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="sendnform" class="needs-validation" novalidate="" action="/settings/editsend/<%=ndata.id%>" method="post" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="row col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="col-12 form-group">
+                                            <label class="col-form-label"><%=lan.Title%></label>
+                                            <input class="form-control ncheckt" type="text" name="title" value="<%=ndata.title%>" placeholder="<%=lan.Enter%> <%=lan.Title%>" required>
+                                        </div>
+                                        <div class="col-12 form-group">
+                                            <label class="col-form-label"><%=lan.Description%></label>
+                                            <textarea class="form-control ncheckd" name="description" rows="5"><%=ndata.description%></textarea>
+                                        </div>
+
+                                        <div class="col-7 mt-1">
+                                        <% if(ndata.customer == "All" && ndata.driver == "All"){ %>
+                                            <input class="selecttype" id="selecttype" type="radio" name="selecttype" value="1" checked>
+                                            <label class="col-form-label m-r-15"><%=lan.Send%> <%=lan.All%></label>
+                                            <input class="selecttype" id="selecttype" type="radio" name="selecttype" value="2">
+                                            <label class="col-form-label"><%=lan.Selected%> <%=lan.User%></label>
+                                        <% } else { %>
+                                            <input class="selecttype" id="selecttype" type="radio" name="selecttype" value="1">
+                                            <label class="col-form-label m-r-15"><%=lan.Send%> <%=lan.All%></label>
+                                            <input class="selecttype" id="selecttype" type="radio" name="selecttype" value="2" checked>
+                                            <label class="col-form-label"><%=lan.Selected%> <%=lan.User%></label>
+                                        <% }; %>
+                                        </div>
+                                        
+                                        <% if(ndata.customer == "All" && ndata.driver == "All"){ %>
+                                        <div class="row col-12 mt-1 d-none" id="notiuser">
+                                        <% } else { %>
+                                        <div class="row col-12 mt-1" id="notiuser">
+                                        <% }; %>
+                                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                                <label class="col-form-label"><%=lan.Customer%> <%=lan.List%></label>
+                                                <% if(ndata.customer == "All"){ %>
+                                                    <select class="js-example-basic-single" id="ncustomer" name="customer" required>
+                                                      <option value selected disabled><%=lan.Select%> <%=lan.Customer%></option>
+                                                      <% customer.forEach(function(cus){ %>
+                                                      <option value="<%=cus.id%>"><%=cus.name%></option>
+                                                      <% }) %>
+                                                    </select>
+                                                <% } else { %>
+                                                    <select class="js-example-basic-single" id="ncustomer" name="customer" required>
+                                                      <option value selected disabled><%=lan.Select%> <%=lan.Customer%></option>
+                                                      <% customer.forEach(function(cus){ %>
+                                                      <option value="<%=cus.id%>" <%= ndata.customer == cus.id ? 'selected' : '' %>><%=cus.name%></option>
+                                                      <% }) %>
+                                                    </select>
+                                                <% }; %>
+
+                                                <div>
+                                                    <% if(ndata.customer == "All"){ %>
+                                                        <input id="allcus" type="checkbox" name="allcustomer" checked>
+                                                    <% } else { %>
+                                                        <input id="allcus" type="checkbox" name="allcustomer">
+                                                    <% }; %>
+                                                    <label class="col-form-label"><%=lan.All%> <%=lan.Customer%></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                                <label class="col-form-label"><%=lan.Driver%> <%=lan.List%></label>
+                                                <% if(ndata.driver == "All"){ %>
+                                                      <select class="js-example-basic-single" id="nsitter" name="driver" required>
+                                                        <option value selected disabled><%=lan.Select%> <%=lan.Driver%></option>
+                                                        <% driver.forEach(function(dri){ %>
+                                                        <option value="<%=dri.id%>"><%=dri.name%></option>
+                                                        <% }) %>
+                                                      </select>
+                                                <% } else { %>
+                                                      <select class="js-example-basic-single" id="nsitter" name="driver" required>
+                                                        <option value selected disabled><%=lan.Select%> <%=lan.Driver%></option>
+                                                        <% driver.forEach(function(dri){ %>
+                                                        <option value="<%=dri.id%>" <%= ndata.driver == dri.id ? 'selected' : '' %>><%=dri.first_name%> <%=dri.last_name%></option>
+                                                        <% }) %>
+                                                      </select>
+                                                <% }; %>
+
+                                                <div>
+                                                    <% if(ndata.driver == "All"){ %>
+                                                        <input id="allsitt" type="checkbox" name="alldriver" checked>
+                                                    <% } else { %>
+                                                        <input id="allsitt" type="checkbox" name="alldriver">
+                                                    <% }; %>
+                                                    <label class="col-form-label"><%=lan.All%> <%=lan.Driver%></label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6 col-md-5 col-lg-5 col-xl-5 mt-3 d-flex">
+                                                <div class="col-4">
+                                                    <input class="form-control" type="text" placeholder="<%=lan.Deactive%>" readonly>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <div class="icon-state switch-outline" style="padding-top: 6px;">
+                                                        <label class="switch">
+                                                            <input type="checkbox" name="status" <%= ndata.status == '1' ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                  <input class="form-control" type="text" placeholder="<%=lan.Active%>" readonly>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="col-12 form-group  mb-0">
+                                            <div class="text-center">
+                                                <% if(ndata.image == ""){ %>
+                                                    <img id="file-preview" width="180" height="180" src="../images/dashboard/default/profile.png" alt="image">
+                                                <% } else { %>
+                                                    <a href="../../<%= ndata.image %>" target="_blank"><img id="file-preview" width="180" height="180" src="../../<%= ndata.image %>" alt="image"></a>
+                                                <% }; %>
+                                            </div>
+                                            <label class="col-form-label"><%=lan.Image%> (<%=lan.Ratio%> 1:1)</label>
+                                            <input class="form-control" style="height: 47px;" type="file" name="image" onchange="showPreview(event)">
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <p class="text-danger d-none mt-3" id="send_all"><%=lan.Please_Enter_All_Detail%>.</p>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="text-end mt-3">
+                                <button class="btn btn-square btn-primary btn-air-primary add_detail_btn b-r-10" id="notificatio_btn" type="submit"><%=lan.Edit%> <%=lan.Send%> <%=lan.Notification%></button> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <%- include('./partials/footer'); -%>
+        <%- include('./partials/script'); -%>
+  </body>
+</html>

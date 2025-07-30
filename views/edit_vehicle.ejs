@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=lan.Edit%> <%=lan.Vehicle%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Vehicle%></li>
+                    <li class="breadcrumb-item active"><%=lan.Edit%> <%=lan.Vehicle%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="card">
+                  <div class="card-body">
+                    <form  class="needs-validation" novalidate="" action="/vehicle/edit_vehicle/<%=vehicle.id%>" method="post" enctype="multipart/form-data">
+                      <div class="row">
+
+                        <div class="col-12">
+                          <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                              <div class="col-12">
+                                <div class="text-center form-group">
+                                  <% if(!vehicle.image) { %>
+                                    <img id="file-preview" width="150" height="150" src="../../images/dashboard/default/profile.png" alt="image">
+                                  <% } else { %>
+                                    <a href="../../<%=vehicle.image%>" target="_blank"><img id="file-preview" width="150" height="150" src="../../<%=vehicle.image%>" alt="image"></a>
+                                  <% }; %>
+                                </div>
+                              </div>
+                              <div class="col-12 form-group">
+                                <label class="col-form-label"><%=lan.image%></label>
+                                <input class="form-control" style="height: 47px;" type="file" name="image" onchange="showPreview(event)">
+                              </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                              <div class="col-12">
+                                <div class="text-center form-group">
+                                  <% if(!vehicle.map_img) { %>
+                                    <img id="second-file-preview" width="150" height="150" src="../../images/dashboard/default/profile.png" alt="image">
+                                  <% } else { %>
+                                    <a href="../../<%=vehicle.map_img%>" target="_blank"><img id="second-file-preview" width="150" height="150" src="../../<%=vehicle.map_img%>" alt="image"></a>
+                                  <% }; %>
+                              </div>
+                              </div>
+                              <div class="col-12 form-group">
+                                <label class="col-form-label"><%=lan.Map%> <%=lan.image%></label>
+                                <input class="form-control dricheck" style="height: 47px;" type="file" name="map_image" onchange="secondshowPreview(event)">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Name%></label>
+                          <input class="form-control" type="text" name="name" value="<%=vehicle.name%>" placeholder="<%=lan.Enter%> <%=lan.Name%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                          <label class="col-form-label"><%=lan.Passenger%> <%=lan.Capacity%></label>
+                          <input class="form-control" type="number" name="passenger_capacity" value="<%=vehicle.passenger_capacity%>" placeholder="<%=lan.Enter%> <%=lan.Passenger%> <%=lan.Capacity%>" required>
+                        </div>
+
+                        <div class="col-12 form-group">
+                          <label class="col-form-label"><%=lan.Description%></label>
+                          <textarea class="form-control" name="description" id="" rows="3"><%=vehicle.description%></textarea>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 form-group">
+                          <label class="col-form-label"><%=lan.Min_KM%> <%=lan.Distance%></label><i class="fa fa-info-circle f-16 mt-2 m-l-5" data-bs-toggle="tooltip" data-bs-placement="Top" title="<%=lan.category_min_km_distance%>"></i>
+                          <input class="form-control" type="number" name="min_km_distance" value="<%=vehicle.min_km_distance%>" placeholder="<%=lan.Enter%> <%=lan.Min_KM%> <%=lan.Distance%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                          <label class="col-form-label"><%=lan.Min_KM%> <%=lan.Price%></label><i class="fa fa-info-circle f-16 mt-2 m-l-5" data-bs-toggle="tooltip" data-bs-placement="Top" title="<%=lan.category_min_km_price%>"></i>
+                          <input class="form-control" type="number" name="min_km_price" value="<%=vehicle.min_km_price%>" placeholder="<%=lan.Enter%> <%=lan.Per_KM%> <%=lan.Price%>" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                          <label class="col-form-label"><%=lan.After_KM%> <%=lan.Price%></label><i class="fa fa-info-circle f-16 mt-2 m-l-5" data-bs-toggle="tooltip" data-bs-placement="Top" title="<%=lan.category_after_km_price%>"></i>
+                          <input class="form-control" type="number" name="after_km_price" value="<%=vehicle.after_km_price%>" placeholder="<%=lan.Enter%> <%=lan.After_KM%> <%=lan.Price%>" required>
+                        </div>
+
+                        <div class=" col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                            <div class="row">
+                                <label class="col-form-label"><%=lan.Commission%> <%=lan.Rate%></label>
+                                <div class="col-sm-6 col-md-8 col-lg-8 col-xl-8">
+                                    <input class="form-control" type="number" name="comission_rate" value="<%=vehicle.comission_rate%>" placeholder="<%=lan.Enter%> <%=lan.Commission%> <%=lan.Rate%>" required>
+                                </div>
+                                <div class="col-sm-6 col-md-4 col-lg-4 col-xl-4 d-flex">
+                                    <div class="col-4">
+                                        <input class="form-control" type="text" placeholder="<%=lan.FIX%>" readonly>
+                                    </div>
+                                    <div class="col-4 text-center">
+                                        <div class="icon-state switch-outline" style="padding-top: 6px;">
+                                            <label class="switch">
+                                                <input type="checkbox" name="comission_type" <%= vehicle.comission_type == 1 ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <input class="form-control" type="text" placeholder="%" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 form-group">
+                            <label class="col-form-label"><%=lan.Extra%> <%=lan.Charge%></label>
+                            <input class="form-control" type="number" name="extra_charge" value="<%=vehicle.extra_charge%>" placeholder="<%=lan.Enter%> <%=lan.Extra%> <%=lan.Charge%>" required>
+                        </div>
+
+                        <div class="col-12 mt-1">
+                          <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                              <div class="d-flex mb-2">
+                                <div class="icon-state switch-outline">
+                                  <label class="switch">
+                                    <input type="checkbox" name="bidding" id="bidding_status_check" <%= vehicle.bidding == 1 ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                                  </label>
+                                </div>
+                                <label class="col-form-label m-l-10"><%=lan.Set_you_re_preferred_price%> / <%=lan.Bidding_System%></label>
+                              </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 <%= vehicle.bidding == 1 ? '' : 'd-none' %>" id="minfare">
+                              <label class="col-form-label"><%=lan.Minimum%> <%=lan.Fare%></label>
+                              <input class="form-control" id="minfarein" type="number" name="minimum_fare" value="<%=vehicle.minimum_fare%>" placeholder="<%=lan.Enter%> <%=lan.Minimum%> <%=lan.Fare%>" <%= vehicle.bidding == 1 ? "required" : '' %>>
+                            </div>
+                            <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 <%= vehicle.bidding == 1 ? '' : 'd-none' %>" id="maxfare">
+                              <label class="col-form-label"><%=lan.Maximum%> <%=lan.Fare%></label>
+                              <input class="form-control" id="maxfarein" type="number" name="maximum_fare" value="<%=vehicle.maximum_fare%>" placeholder="<%=lan.Enter%> <%=lan.Maximum%> <%=lan.Fare%>" <%= vehicle.bidding == 1 ? "required" : '' %>>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="col-12">
+                          <div class="d-flex mt-2">
+                            <div class="icon-state switch-outline">
+                              <label class="switch">
+                                <input type="checkbox" name="whether_charge" <%= vehicle.whether_charge == 1 ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                              </label>
+                            </div>
+                            <label class="col-form-label m-l-10"><%=lan.Weather%> <%=lan.Bad%></label><i class="fa fa-info-circle f-16 mt-2 m-l-5" data-bs-toggle="tooltip" data-bs-placement="Top" title="<%=lan.category_weather_bad%>"></i>
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <div class="d-flex mt-2">
+                            <div class="icon-state switch-outline">
+                              <label class="switch">
+                                <input type="checkbox" name="status" <%= vehicle.status == 1 ? 'checked' : '' %>><span class="switch-state bg-success"></span>
+                              </label>
+                            </div>
+                            <label class="col-form-label m-l-10"><%=lan.Status%></label>
+                          </div>
+                        </div>
+
+                        </div>
+                        <div class="text-end mt-5">
+                          <button class="btn btn-square btn-primary btn-air-primary add_detail_btn b-r-10" id="socketchange" type="submit"><%=lan.Submit%></button> 
+                        </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <%- include('./partials/footer'); -%>
+        <%- include('./partials/script'); -%>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="../../socket_function.js"></script>
+  </body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=lan.Ride%> <%=lan.Payment%> <%=lan.Report%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Ride%> <%=lan.Payment%> <%=lan.Report%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header col-12 pb-0">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                                    <label class="col-label"><%=lan.Start%> <%=lan.Date%></label>
+                                    <input class="form-control" id="payreports" type="date" name="email" value="">
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                                    <label class="col-label"><%=lan.End%> <%=lan.Date%></label>
+                                    <input class="form-control" id="payreporte" type="date" name="email" value="">
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 text-end form-group">
+                                    <button class="btn btn-square btn-primary b-r-10" id="down_pay_report" style="margin-top: 30px;" type="button"><%=lan.Download%> <%=lan.Report%></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive theme-scrollbar">
+                                <table class="display" id="basic-1">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th><%=lan.Rider%></th>
+                                            <th><%=lan.Driver%></th>
+                                            <th><%=lan.Ride%></th>
+                                            <th><%=lan.Payment%> <%=lan.Type%></th>
+                                            <th><%=lan.Amount%></th>
+                                            <th><%=lan.Date%></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ride_payment_report">
+                                        <% let i = 1 %>
+                                        <% rd.forEach((data) => { %>
+                                            <tr>
+                                                <td><%= i %></td>
+                                                <td><%= data.cname %></td>
+                                                <td><%= data.dfname %> <%= data.dlname %></td>
+                                                <td><a href="/rides/codetail/<%= data.id %>">#<%= data.id %></a></td>
+                                                <td>
+                                                    <% if (data.pay_name != "") { %>
+                                                        <%= data.pay_name %>
+                                                    <% } else { %>
+                                                       0 <%=lan.Wallet%>
+                                                    <% } %>
+                                                </td>
+                                                <td class="invosymbol"><%= data.price %></td>
+                                                <td><%= data.start_time %></td>
+                                            </tr>
+                                        <% i++ %>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+    <%- include('./partials/footer'); -%>
+    <%- include('./partials/script'); -%>
+  </body>
+</html>

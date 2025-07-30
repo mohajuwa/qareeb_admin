@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/head'); -%>
+    
+</head>
+<body onload="startTime()">
+    <%- include('./partials/header_sidebar'); -%>
+    
+    <!-- tap on top starts-->
+
+        <!-- Page Sidebar Ends-->
+        <div class="page-body">
+          <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3><%=lan.Send%> <%=lan.Notification%></h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/index"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item"><%=lan.Dashboard%></li>
+                    <li class="breadcrumb-item active"><%=lan.Send%> <%=lan.Notification%></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Container-fluid starts-->
+          <div class="container-fluid">
+            <div class="row">
+                <% let permiss = per != "1" ? per.send_notification[1] : "1" %>
+                <% if(permiss == "1"){ %>
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="sendnform" class="needs-validation" novalidate="" action="/settings/send_save_notification" method="post" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="row col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="col-12 form-group">
+                                            <label class="col-form-label"><%=lan.Title%></label>
+                                            <input class="form-control ncheckt" type="text" name="title" placeholder="<%=lan.Enter%> <%=lan.Title%>" required>
+                                        </div>
+                                        <div class="col-12 form-group">
+                                            <label class="col-form-label"><%=lan.Description%></label>
+                                            <textarea class="form-control" name="description" rows="5"></textarea>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <input class="selecttype" id="selecttype" type="radio" name="selecttype" value="1">
+                                            <label class="col-form-label m-r-15"><%=lan.Send%> <%=lan.All%></label>
+                                            <input class="selecttype" id="selecttype" type="radio" name="selecttype" value="2">
+                                            <label class="col-form-label"><%=lan.Selected%> <%=lan.User%></label>
+                                        </div>
+
+                                        <div class="row col-12 mt-3 d-none" id="notiuser">
+                                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                                <label class="col-form-label"><%=lan.Customer%> <%=lan.List%></label>
+                                                <select class="js-example-basic-single" id="ncustomer" name="customer" required>
+                                                    <option value selected disabled><%=lan.Select%> <%=lan.Customer%></option>
+                                                    <% customer.forEach(function(cus){ %>
+                                                        <option value="<%=cus.id%>"><%=cus.name%></option>
+                                                    <% }) %>
+                                                </select>
+
+                                                <div>
+                                                    <input id="allcus" type="checkbox" name="allcustomer">
+                                                    <label class="col-form-label"><%=lan.All%> <%=lan.Customer%></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                                <label class="col-form-label"><%=lan.Driver%> <%=lan.List%></label>
+                                                <select class="js-example-basic-single" id="nsitter" name="driver" required>
+                                                    <option value selected disabled><%=lan.Select%> <%=lan.Driver%></option>
+                                                    <% driver.forEach(function(dri){ %>
+                                                        <option value="<%=dri.id%>"><%=dri.first_name%> <%=dri.last_name%></option>
+                                                    <% }) %>
+                                                </select>
+
+                                                <input id="allsitt" type="checkbox" name="alldriver">
+                                                <label class="col-form-label"><%=lan.All%> <%=lan.Driver%></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="col-12 form-group  mb-0">
+                                            <div class="text-center">
+                                                <img id="file-preview" width="180" height="180" src="../images/dashboard/default/profile.png" alt="image">
+                                            </div>
+                                            <label class="col-form-label"><%=lan.Image%> (<%=lan.Ratio%> 1:1)</label>
+                                            <input class="form-control" style="height: 47px;" type="file" name="image" onchange="showPreview(event)">
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <p class="text-danger d-none mt-3" id="send_all"><%=lan.Please_Enter_All_Detail%>.</p>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="text-end mt-3">
+                                <button class="btn btn-square btn-primary btn-air-primary add_detail_btn b-r-10" id="notificatio_btn" type="submit"><%=lan.Send%> <%=lan.Notification%></button> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+
+
+
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header pb-0">
+                            <h6 class="mb-0"><%=lan.Push%> <%=lan.Notification%></h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive theme-scrollbar">
+                                <table class="display" id="basic-1">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th><%=lan.Image%></th>
+                                            <th><%=lan.Title%></th>
+                                            <th><%=lan.Description%></th>
+                                            <th><%=lan.Customer%></th>
+                                            <th><%=lan.Driver%></th>
+                                            <th><%=lan.Date%></th>
+                                            <th><%=lan.Notification%> <%=lan.Count%></th>
+                                            <th><%=lan.Status%></th>
+                                            <th><%=lan.Resend%></th>
+                                            <% let permissions = per != "1" ? per.send_notification[2] : "1" %>
+                                            <% if(permissions == "1"){ %>
+                                            <th><%=lan.Action%></th>
+                                            <% } %>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% var i = 1 %>
+                                        <% pdata.forEach((data) => { %>
+                                            <tr>
+                                                <td><%= i %></td>
+                                                <td class="pt-1 pb-1">
+                                                    <% if(data.image == ""){ %>
+                                                        <img width="50px" height="50px" src="../images/dashboard/default/profile.png" alt="image">
+                                                    <% } else { %>
+                                                        <a href="../../<%= data.image %>" target="_blank"><img width="50px" height="50px" src="../../<%= data.image %>" alt="image"></a>
+                                                    <% }; %>
+                                                </td>
+                                                <td><%= data.title %></td>
+                                                <td><%= data.description %></td>
+                                                <td>
+                                                    <% if (data.customer != '' && data.customer != 'All') { %>
+                                                        <%= data.cus_name %>
+                                                    <% } else if (data.customer == 'All') { %>
+                                                        <%=lan.All%>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <% if (data.driver != '' && data.driver != 'All') { %>
+                                                        <%= data.first_name %> <%= data.last_name %>
+                                                    <% } else if (data.driver == 'All') { %>
+                                                        <%=lan.All%>
+                                                    <% } %>
+                                                </td>
+                                                <td><%= data.date %></td>
+                                                <td><%= data.count %></td>
+                                                <td>
+                                                    <% if (data.status == '1') { %>
+                                                        <span class="badge badge-success"><%=lan.Active%></span>
+                                                    <% } else { %>
+                                                        <span class="badge badge-danger"><%=lan.Deactive%></span>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <ul class="action"> 
+                                                        <li><a href="/settings/noti_resend/<%= data.id %>"><i class="icon-reload"></i></a></li>
+                                                    </ul>
+                                                </td>
+                                                <% if(permissions == "1"){ %>
+                                                <td>
+                                                    <ul class="action"> 
+                                                    <li class="edit"><a href="/settings/send_edit/<%= data.id %>"><i class="icon-pencil-alt"></i></a></li>
+                                                    <li class="delete"><a href="/settings/noti_delete/<%= data.id %>"><i class="icon-trash"></i></a></li>
+                                                    </ul>
+                                                </td>
+                                                <% } %>
+                                            </tr>
+                                        <% i++ %>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+          </div>
+          <!-- Container-fluid Ends-->
+        </div>
+
+        <%- include('./partials/footer'); -%>
+        <%- include('./partials/script'); -%>
+  </body>
+</html>

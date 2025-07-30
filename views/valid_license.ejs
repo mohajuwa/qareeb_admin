@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <%- include('./partials/frontend_head'); -%>
+    
+</head>
+<body onload="offdarkmode()">
+  <!-- Loader starts-->
+  <div class="loader-wrapper">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"> </div>
+    <div class="dot"></div>
+  </div>
+  <!-- Loader ends-->
+  <!-- login page start-->
+  <div class="container-fluid p-0">
+    <div class="row m-0">
+      <div class="col-12 p-0">    
+        <div class="login-card">
+          <div>
+            <div class="login-main" style="width: 650px;"> 
+              <form class="theme-form" action="/login" method="post">
+                <h4 class="text-center">Validate your account</h4>
+                <p class="text-center">Welcome back! Validate Your Account</p>
+                <div id="getmsg"></div>
+                <div class="mb-3">
+                                            <label class="mb-1"><strong>Enter Envato Purchase Code <a href="https://help.market.envato.com/hc/en-us/articles/202822600-Where-Is-My-Purchase-Code">You get purchase code from here</a></strong></label>
+                                                <input type="taxt" class="form-control" placeholder="Enter Envato Purchase Code" id="inputCode">
+                                                
+                                        </div>
+                                        
+                                       
+                                        
+                                        
+                                            <button id="sub_activate" class="btn btn-primary btn-block w-100">Activate Domain</button>
+
+                
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('./partials/script'); -%>
+
+
+</body>
+</html>
