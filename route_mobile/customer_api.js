@@ -44,15 +44,16 @@ const customer_profile = multer({storage : storage1});
 router.post("/signup", async(req, res)=>{
     try {
         const {name, email, ccode, phone, password, referral_code} = req.body;
-
+        
         const missingField = ["name", "email", "ccode", "phone", 'password'].find(field => !req.body[field]);
-        if(missingField) return res.status(200).json({ ResponseCode: 401, Result:false, message: 'Something went wrong' })
+        if(missingField) return res.status(200).json({ ResponseCode: 401, Result:false, message: 'Something went wrong' });
 
         const cus_data = await DataFind(`SELECT * FROM tbl_customer WHERE country_code = '${ccode}' AND phone = '${phone}'`);
         const general = await DataFind(`SELECT refer_credit, one_app_id, one_api_key FROM tbl_general_settings`);
-        let generald = { one_app_id: general[0].one_app_id, one_api_key: general[0].one_api_key }
-        if (cus_data != "") return res.status(200).json({ ResponseCode: 401, Result:false, message: 'PhoneNo Already Exists!', general:generald })
-        
+        let generald = { one_app_id: general[0].one_app_id, one_api_key: general[0].one_api_key };
+
+        if (cus_data != "") return res.status(200).json({ ResponseCode: 401, Result:false, message: 'PhoneNo Already Exists!', general:generald });
+
         let esname = mysql.escape(name);
         const hash = await bcrypt.hash(password, 10);
         let otp_result = await AllFunction.otpGenerate(6);
@@ -74,20 +75,20 @@ router.post("/signup", async(req, res)=>{
             }
         }
 
-        const date = new Date().toISOString().split('T');
-        if (await DataInsert(`tbl_customer`, `profile_image, name, email, country_code, phone, password, status, referral_code, wallet, date`,
-            `'', ${esname}, '${email}', '${ccode}', '${phone}', '${hash}', '1', '${otp_result}', '0', '${date}'`, req.hostname, req.protocol) == -1) {
-        
+        // FIXED: Remove 'date' from the INSERT statement
+        if (await DataInsert(`tbl_customer`, `profile_image, name, email, country_code, phone, password, status, referral_code, wallet`,
+            `'', ${esname}, '${email}', '${ccode}', '${phone}', '${hash}', '1', '${otp_result}', '0'`, req.hostname, req.protocol) == -1) {                 
             return res.status(200).json({ ResponseCode: 401, Result:false, message: process.env.dataerror });
         }
-        const new_cus_data = await DataFind(`SELECT * FROM tbl_customer WHERE country_code = '${ccode}' AND phone = '${phone}'`);
         
+        const new_cus_data = await DataFind(`SELECT * FROM tbl_customer WHERE country_code = '${ccode}' AND phone = '${phone}'`);
+                
         return res.status(200).json({ ResponseCode: 200, Result:true, message: 'Signup successful', general:generald, customer_data:new_cus_data[0]});
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
     }
-})
+});
 
 
 
