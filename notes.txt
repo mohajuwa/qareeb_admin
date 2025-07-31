@@ -1,0 +1,1 @@
+Asee the project this route https://qareeb.modwir.com/driver/add , I need you to make for me sql insert data to test that will fit with db as you know in the project , the project is in Yemen totally 
