@@ -317,9 +317,10 @@ function convertSeconds(seconds) {
 
 router.get("/list", auth, async(req, res)=>{
     try {
-        const driver_list = await DataFind(`SELECT tbl_driver.*, COALESCE(tbl_vehicle.name, "") AS vname
+        const driver_list = await DataFind(`SELECT tbl_driver.*, COALESCE(tbl_vehicle.name, "غير محدد") AS vname
                                             FROM tbl_driver
-                                            JOIN tbl_vehicle ON tbl_driver.vehicle = tbl_vehicle.id ORDER BY id DESC`);      
+                                            LEFT JOIN tbl_vehicle ON tbl_driver.vehicle = tbl_vehicle.id 
+                                            ORDER BY tbl_driver.id DESC`);      
 
         res.render("driver", {
             auth:req.user, general:req.general, noti:req.notification, per:req.per, lan:req.lan.ld, land:req.lan.lname, driver_list
